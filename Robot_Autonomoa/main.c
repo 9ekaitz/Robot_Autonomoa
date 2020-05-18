@@ -8,4 +8,8 @@ main(){
 
 	printf("hola mundo");
 
+	printf("Iñaki puto");
+
+	return 0;
+
 }
