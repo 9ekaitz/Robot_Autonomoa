@@ -8,7 +8,7 @@ main(){
 
 	printf("hola mundo");
 
-	printf("Iñaki puto");
+	printf("sabes que no");
 
 	return 0;
 
