@@ -1,6 +1,6 @@
 #include "SDL2/SDL.h"
 #include <stdio.h>
-
+//llaguno
 int main(int argc, char* argv[]) {
 
 	SDL_Window *window;                    // Declare a pointer
