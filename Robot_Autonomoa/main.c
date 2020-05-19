@@ -1,3 +1,4 @@
+
 #include "SDL2/SDL.h"
 #include <stdio.h>
 
@@ -26,7 +27,7 @@ int main(int argc, char* argv[]) {
     }
 
     // The window is open: could enter program loop here (see SDL_PollEvent())
-
+ printf("HALOJAAAAA");
     SDL_Delay(3000);  // Pause execution for 3000 milliseconds, for example
 
     // Close and destroy the window
