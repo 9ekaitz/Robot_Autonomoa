@@ -3,7 +3,7 @@
 
 int main(int argc, char* argv[]) {
 
-    SDL_Window *window;                    // Declare a pointer
+	SDL_Window *window;                    // Declare a pointer
 
     SDL_Init(SDL_INIT_VIDEO);              // Initialize SDL2
 
