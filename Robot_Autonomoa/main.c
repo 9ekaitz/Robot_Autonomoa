@@ -1,39 +1,40 @@
 #include "SDL2/SDL.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include "basic.h"
 
 //Ekaitz
 int main(int argc, char* argv[]) {
 
+	SDL_bool run = SDL_TRUE;
     SDL_Window *window;                    // Declare a pointer
+    SDL_Renderer *render;
+    Uint32 refresh_rate = 0;
+    NODO_IMG *img_header;
 
-    SDL_Init(SDL_INIT_VIDEO);              // Initialize SDL2
+    if (windowandRender( &window, &render) != -1)
+    {
+    	if (window == NULL)
+    	{
+    		SDL_DestroyWindow(window);	// Close and destroy the window
+    	}
 
-    // Create an application window with the following settings:
-    window = SDL_CreateWindow(
-        "An SDL2 window",                  // window title
-        SDL_WINDOWPOS_UNDEFINED,           // initial x position
-        SDL_WINDOWPOS_UNDEFINED,           // initial y position
-        640,                               // width, in pixels
-        480,                               // height, in pixels
-        SDL_WINDOW_OPENGL                  // flags - see below
-    );
-
-    // Check that the window was successfully created
-    if (window == NULL) {
-        // In the case that the window could not be made...
-        printf("Could not create window: %s\n", SDL_GetError());
-        return 1;
     }
 
-    // The window is open: could enter program loop here (see SDL_PollEvent())
+//    launch(&render, &img_header);
 
-    SDL_Delay(3000);  // Pause execution for 3000 milliseconds, for example
+    while (run)
+    {
+    	if (SDL_TICKS_PASSED(SDL_GetTicks(), refresh_rate))
+    	{
+    		renderObjects();
+    		refresh(&render);
+    		refresh_rate = SDL_GetTicks() + 50;		//20 fps
+    	}
+    }
 
-    // Close and destroy the window
-    SDL_DestroyWindow(window);
+    close(&window, &render);
 
-    // Clean up
     SDL_Quit();
     return 0;
 }
