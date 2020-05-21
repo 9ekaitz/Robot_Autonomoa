@@ -1,65 +1,137 @@
 #include "SDL2/SDL.h"
 #include <stdio.h>
-#include <limits.h> //INT_MAX
-#include <float.h> //FLT_MAX
-#include "funtzioak.h"
-#define DEFINITUGABEA -1
+#include <stdlib.h>
+
+#define MAX_STR 128
 
 //Gorka
-int main(int argc, char* argv[]) {
 
-    SDL_Window *window;                    // Declare a pointer
+typedef enum BOOLEANOA {FALSE, TRUE};
 
-    SDL_Init(SDL_INIT_VIDEO);              // Initialize SDL2
+typedef struct Nodoa{
+	char izena;
+	int bisitatua;
+	int amaitua;
+	int bide_kant;
+	char aurrekoa;
+	struct Ertza* gertuena;
+	struct Nodoa* ptrHurrengoa;
+}NODOA;
 
-    // Create an application window with the following settings:
-    window = SDL_CreateWindow(
-        "An SDL2 window",                  // window title
-        SDL_WINDOWPOS_UNDEFINED,           // initial x position
-        SDL_WINDOWPOS_UNDEFINED,           // initial y position
-        1280,                               // width, in pixels
-        720,                               // height, in pixels
-        SDL_WINDOW_OPENGL                  // flags - see below
-    );
+typedef struct Ertza{
+	struct Nodoa* ertza;
+	int pisua;
+	struct Ertza* ptrHurrengoa;
+}ERTZA;
 
-    // Check that the window was successfully created
-    if (window == NULL) {
-        // In the case that the window could not be made...
-        printf("Could not create window: %s\n", SDL_GetError());
-        return 1;
-    }
+typedef struct Zerrenda{
+	struct Nodoa* izena;
+	struct Zerrenda* ptrHurrengoa;
+}ZERRENDA;
 
-    //////////////////////////////////////////////////////////////////////
-    //https://es.scribd.com/doc/44021747/Algoritmo-Dijkstra-en-c
-    //////////////////////////////////////////////////////////////////////
-    int M, A, B;
-    char str[128];
-    //matrizeak hasieratu
 
-    fgets(str, 128, stdin);
-    sscanf(str, "%d", &M);
+int main(int argc, char* argv[])
+{
+	NODOA* nodohasiera = NULL;
+	ZERRENDA* zerrendahasiera = NULL;
+	ZERRENDA* zerrendaamaiera = NULL;
 
-    for (int i = 0; i < N; ++i)
-    {
-		aurrekoa[i] = DEFINITUGABEA;
-		bisitatua[i] = FALSE;
-		minimo[i] = INT_MAX;
-		for (int j = 0; j < M; ++j)
+    return 0;
+}
+void ErpinaHasieratu(NODOA* berria)
+{
+	berria->ptrHurrengoa = NULL;
+	berria->gertuena = NULL;
+	berria->bisitatua = FALSE;
+	berria->amaitua = FALSE;
+	berria->bide_kant = -1;
+	berria->aurrekoa = 0;
+}
+void NodoanSartu(NODOA* nodohasiera)
+{
+	NODOA* aux;
+	NODOA* berria = (NODOA*)malloc(sizeof(NODOA));
+	char str[MAX_STR];
+
+	printf("Sartu mapako puntuaren izena: ");
+	fgets(str, 128, stdin);
+	sscanf(str, "%c", &berria->izena);
+
+	ErpinaHasieratu(&berria);
+
+	if (nodohasiera == NULL)
+	{
+		nodohasiera = berria;
+	}
+	else {
+		aux = berria;
+		while(aux->ptrHurrengoa != NULL)
 		{
-			bidea[i][j] = FLT_MAX;
+			aux = aux->ptrHurrengoa;
 		}
+		aux->ptrHurrengoa = berria;
 	}
 
-    //Distantziak neurtu i
+}
 
-    //////////////////////////////////////////////////////////////////////
+void ErtzaSartu(NODOA* nodohasiera)
+{
+	char A, B, str[MAX_STR];
+	NODOA* aux = nodohasiera;
+	NODOA* aux2 = nodohasiera;
+	ERTZA* berria = (ERTZA*)malloc(sizeof(ERTZA));
 
-    SDL_Delay(3000);  // Pause execution for 3000 milliseconds, for example
+	berria->ptrHurrengoa = NULL;
 
-    // Close and destroy the window
-    SDL_DestroyWindow(window);
+	if(nodohasiera == NULL)
+	{
+		printf("Error: Grafoa utsik dago!\n");
+	}
 
-    // Clean up
-    SDL_Quit();
-    return 0;
+	printf("Sartu ertzaren hasiera puntua: ");
+	fgets(str, MAX_STR, stdin);
+	sscnaf(str, "%c", &A);
+	printf("Sartu ertzaren amaiera puntua: ");
+	fgets(str, MAX_STR, stdin);
+	sscnaf(str, "%c", &B);
+
+	printf("Sartu ertzaren pisua: ");
+	fgets(str, MAX_STR, stdin);
+	sscanf(str, "%d", &berria->pisua);
+
+	//Konprobatu behar ea ondo dagoen
+	//AMAITZEKO
+}
+
+void Dijkstra(NODOA* nodohasiera)
+{
+	NODOA* aux = nodohasiera;
+	char A, B;
+
+	while (aux != NULL)
+	{
+		if(aux->izena == A)
+		{
+			aux->amaitua = TRUE;
+			aux->bide_kant = 0;
+			break;
+		}
+		aux = aux->ptrHurrengoa;
+	}
+	if (aux == NULL)
+	{
+		printf("Error: Erpina ez da aurkitu!\n");
+		return;
+	}
+	while (aux != NULL)
+	{
+		ERTZA* aux2 = aux->gertuena;
+		while (aux2 != NULL)
+		{
+			if((aux2->ertza->bide_kant == -1) || (aux->bide_kant + aux2->pisua < aux2->ertza->bide_kant) ) //Ertz hau ez bada horaindik bisitatu edo
+			{
+
+			}
+		}
+	}
 }
