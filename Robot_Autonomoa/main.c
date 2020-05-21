@@ -20,19 +20,17 @@ int main(int argc, char* argv[]) {
     SDL_Delay(3000);
 
 
-//    while (run)
-//    {
-//    	if (SDL_TICKS_PASSED(SDL_GetTicks(), refresh_rate))
-//    	{
-//    		renderObjects(&render, img_header);
-//    		refresh(render);
-//    		refresh_rate = SDL_GetTicks() + 50;		//20 fps
-//    	}
-//    }
-//
-//    	SDL_DestroyWindow(window);
-//    	SDL_DestroyRenderer(render);
+    while (run)
+    {
+    	if (SDL_TICKS_PASSED(SDL_GetTicks(), refresh_rate))
+    	{
+    		renderObjects(&render, img_header);
+    		refresh(render);
+    		refresh_rate = SDL_GetTicks() + 50;		//20 fps
+    	}
+    }
 
+    txapar(window, render);
     SDL_Quit();
     return 0;
 }

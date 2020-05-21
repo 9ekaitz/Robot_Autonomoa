@@ -55,8 +55,8 @@ void renderObjects(SDL_Renderer **render, NODO_IMG *img_header)
 
 	while (aux != NULL)
 	{
-//		if (aux->img->dim->w != -1) SDL_RenderCopy(*render, aux->img->texture, NULL, &aux->img->dim);
-//		else
+		if (aux->img->dim.w != -1) SDL_RenderCopy(*render, aux->img->texture, NULL, &aux->img->dim);
+		else
 		SDL_RenderCopy(*render, aux->img->texture, NULL, NULL);
 		aux = aux->ptrNext;
 	}
@@ -83,6 +83,10 @@ void launch(SDL_Renderer **render, pNODO_IMG *img_header)
 	refresh(*render);
 }
 
-
+void txapar(SDL_Window *window, SDL_Renderer *render)
+{
+	SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(render);
+}
 
 
