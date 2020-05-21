@@ -1,6 +1,9 @@
 #include "SDL2/SDL.h"
 #include <stdio.h>
+#include <limits.h> //INT_MAX
+#include <float.h> //FLT_MAX
 #include "funtzioak.h"
+#define DEFINITUGABEA -1
 
 //Gorka
 int main(int argc, char* argv[]) {
@@ -26,7 +29,30 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // The window is open: could enter program loop here (see SDL_PollEvent())
+    //////////////////////////////////////////////////////////////////////
+    //https://es.scribd.com/doc/44021747/Algoritmo-Dijkstra-en-c
+    //////////////////////////////////////////////////////////////////////
+    int M, A, B;
+    char str[128];
+    //matrizeak hasieratu
+
+    fgets(str, 128, stdin);
+    sscanf(str, "%d", &M);
+
+    for (int i = 0; i < N; ++i)
+    {
+		aurrekoa[i] = DEFINITUGABEA;
+		bisitatua[i] = FALSE;
+		minimo[i] = INT_MAX;
+		for (int j = 0; j < M; ++j)
+		{
+			bidea[i][j] = FLT_MAX;
+		}
+	}
+
+    //Distantziak neurtu
+
+    //////////////////////////////////////////////////////////////////////
 
     SDL_Delay(3000);  // Pause execution for 3000 milliseconds, for example
 

@@ -8,6 +8,12 @@
 #ifndef FUNTZIOAK_H_
 #define FUNTZIOAK_H_
 
-void ImgKargatu(char src[], int zabalera, int altuera, int x, int y);
+typedef enum BOOLEANO {FALSE, TRUE};
+
+//DIJKSTRA
+void dijkstra (int A, int B);
+void biderikMotzena(int A, int B);
+int minimoNodoNoVisitado (int * nodoa);
+
 
 #endif /* FUNTZIOAK_H_ */
