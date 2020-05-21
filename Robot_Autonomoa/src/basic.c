@@ -1,3 +1,4 @@
+#include "image.h"
 #include "basic.h"
 
 
@@ -24,6 +25,7 @@ int windowandRender(SDL_Window **window, SDL_Renderer **render)
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Ezin izan da leihoa sortu: %s\n", SDL_GetError());		//Errorea
 		return -1;
 	}
+
  /*
     --------------IKONOA LEHIOAN------------------
 
@@ -37,24 +39,28 @@ int windowandRender(SDL_Window **window, SDL_Renderer **render)
 	return 0;
 }
 
-void close(SDL_Window **window, SDL_Renderer **render)
+
+void refresh(SDL_Renderer *render)	//dena marrasten du
 {
-	SDL_DestroyWindow(*window);
-	SDL_DestroyRenderer(*render);
+	SDL_RenderPresent(render);
 }
 
-void refresh(SDL_Renderer **render)	//dena marrasten du
+void renderObjects(SDL_Renderer **render, NODO_IMG *img_header)
 {
-	SDL_RenderPresent(*render);
-}
-
-void renderObjects(SDL_Renderer **render)
-{
+	pNODO_IMG aux;
 	SDL_SetRenderDrawColor(*render, 0, 0, 0, 255);	//Kolorea ezarri
 	SDL_RenderClear(*render);	//Pantaila esandako kolorearekin garbitu
 
-//	SDL_RenderCopy(render, Irudiak[i].textura, NULL, NULL);
-	/**
+	aux = img_header;
+
+	while (aux != NULL)
+	{
+//		if (aux->img->dim->w != -1) SDL_RenderCopy(*render, aux->img->texture, NULL, &aux->img->dim);
+//		else
+		SDL_RenderCopy(*render, aux->img->texture, NULL, NULL);
+		aux = aux->ptrNext;
+	}
+	/*
 	 *  \brief Copy a portion of the texture to the current rendering target.
 	 *
 	 *  \param renderer The renderer which should copy parts of a texture.
@@ -69,59 +75,14 @@ void renderObjects(SDL_Renderer **render)
 
 }
 
-//void launch(SDL_Renderer **render, )
-//{
-//
-//}
-//
-
-void load_image(pNODO_IMG *img_header, SDL_Renderer *render, char src[], int x, int y, int w, int h)
+void launch(SDL_Renderer **render, pNODO_IMG *img_header)
 {
+	load_image(img_header, *render, "./media/Interfaz.bmp", -1,-1,-1,-1);
 
-	IMG *image;
-
-	load_imageData(&image, render, src, x, y, w, h);
-	load_imageInsert(img_header, image);
-
-	// como ya he hecho la textura el surface no me hace falta y lo borro
-
+	renderObjects(render, *img_header);
+	refresh(*render);
 }
 
-int load_imageData(IMG **image, SDL_Renderer *render, char src[], int x, int y, int w, int h)
-{
-	SDL_Surface* surface;
-	SDL_Texture* texture;
 
-	IMG *tmp = (IMG *)malloc(sizeof(IMG));
 
-	surface = SDL_LoadBMP(src);
-	if (!surface)
-	{
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Ezin da argazkitik azalera sortu: %s\n", SDL_GetError());
-		return -1;
-	}
 
-	texture = SDL_CreateTextureFromSurface(render, surface);
-	if (!texture)
-	{
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Ezin da azaleratik textura sortu: %s\n", SDL_GetError());
-		return -1;
-	}
-
-	SDL_FreeSurface(surface);
-
-	tmp->texture = texture;
-	rectBuilder(&(*image)->dim, x, y, w, h); //sdl_rect estrukturari balioak emateko
-
-	*image = tmp;
-
-	return 0;
-}
-
-void rectBuilder(SDL_Rect *rect, int x, int y, int w, int h)
-{
-	rect->x = x;
-	rect->y = y;
-	rect->w = w;
-	rect->h = h;
-}
