@@ -10,7 +10,7 @@ typedef struct path{
 	int len;
 }PATH;
 
-PATH dijkstra(int matrix[KOP][KOP], int start, int end);
+PATH dijkstra(uint matrix[KOP][KOP], int start, int end);
 
 void copyPath(int *destVertex, int *destLen, int *srcVertex, int srcLen);
 
@@ -18,8 +18,8 @@ int main()
 {
 	int infinite = INT_MAX, start = 0, end = 4;
 	PATH path;
-int grafiko[KOP][KOP] = {
-		{0,10,3,8,infinite,infinite,infinite,infinite},		//A
+uint grafiko[KOP][KOP] = {
+		{infinite,10,3,8,infinite,infinite,infinite,infinite},		//A
 		{10,0,8,infinite,6,infinite,infinite,infinite},		//B
 		{3,8,0,4,infinite,9,infinite,infinite},				//C
 		{8,infinite,4,0,infinite,infinite,7,infinite},		//D
@@ -34,42 +34,57 @@ int grafiko[KOP][KOP] = {
 return  0;
 }
 
-PATH dijkstra(int matrix[KOP][KOP], int start, int end)
+PATH dijkstra(uint matrix[KOP][KOP], int start, int end)
 {
 	PATH map[KOP];
 	int infinite = INT_MAX;
 	int visited[KOP];
-	int min, pos;
+	int min, pos, min_pos;
 
-	for (int i = 0; i < KOP+1; i++)
+	for (int i = 0; i < KOP; i++)
 	{
 		map[i].cost = infinite;
+		map[i].len = 0;
 		visited[i] = 0;
+		if (matrix[start][i] < map[i].cost)
+		{
+			map[i].cost = matrix[start][i];
+			map[i].vertex[map[i].len] = start;
+			map[i].len++;
+		}
 	}
 
 	map[start].cost = 0;
 	map[start].vertex[0] = start;
 	map[start].len = 1;
 	visited[start] = 1;
-	pos = start;
-
 	while (!visited[end])
 	{
-		min = KOP;
-		for (int j = 0; j < KOP; j++)
+		min = start;
+		min_pos = start;
+		for (pos = 0; pos < KOP; pos++)
 		{
-			if (!visited[j] && (matrix[pos][j] + map[pos].cost) < map[min].cost)
+			if (visited[pos])
 			{
-				min = j;
+				for (int j = 0; j < KOP; j++)
+				{
+					if (!visited[j] && (matrix[pos][j] + map[pos].cost) < (matrix[min_pos][min] + map[min_pos].cost))
+					{
+						min = j;
+						min_pos = pos;
+					}
+				}
 			}
 		}
-		for (int j = 0; j < KOP; j++)
+		for (int i = 0; i < KOP; i++)
 		{
-			if (!visited[j] && map[min].cost + matrix[min][j] < map[j].cost)
+			printf("%d\n", matrix[min][i] + map[min].cost);
+			if (matrix[min][i] + map[min].cost < map[i].cost)
 			{
-				copyPath(map[j].vertex, &map[j].len, map[min].vertex, map[min].len);
-				map[j].vertex[map[j].len] = j;
-				map[j].len++;
+				map[i].cost = matrix[min][i] + map[min].cost;
+				copyPath(map[i].vertex, &map[i].len, map[min].vertex, map[min].len);
+				map[i].vertex[map[i].len] = min;
+				map[i].len++;
 			}
 		}
 		visited[min] = 1;
