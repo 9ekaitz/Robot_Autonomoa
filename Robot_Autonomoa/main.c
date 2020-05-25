@@ -1,36 +1,32 @@
-#include "SDL2/SDL.h"
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
-#include "image.h"
-#include "basic.h"
+#include "matrizeasortu.h"
+#include "matrizeakonprobatu.h"
 
-//Gorka grafikoa
-int main(int argc, char* argv[]) {
+int main()
+{
+	int aukera = 1;
+	char str[128];
 
-	SDL_bool run = SDL_TRUE;
-    SDL_Window *window;                    // Declare a pointer
-    SDL_Renderer *render;
-    Uint32 refresh_rate = 0;
-    NODO_IMG *img_header = NULL;
+	while (aukera != 0)
+	{
+		printf("----------------------\n0. Irten\n1. Matrizea sortu\n2. Matrizea konprobatu\n----------------------\n");
+		fgets(str, 128, stdin);
+		sscanf(str, "%d", &aukera);
 
-    windowandRender(&window, &render);
+		switch(aukera)
+		{
+		case 1:
+			matrizeaSortuExec();
+			break;
+		case 2:
+			matrizeaKonprobatuExec();
+			break;
 
-    launch(&render, &img_header);
+		}
+	}
 
-    SDL_Delay(3000);
 
-
-    while (run)
-    {
-    	if (SDL_TICKS_PASSED(SDL_GetTicks(), refresh_rate))
-    	{
-    		renderObjects(&render, img_header);
-    		refresh(render);
-    		refresh_rate = SDL_GetTicks() + 50;		//20 fps
-    	}
-    }
-
-    txapar(window, render);
-    SDL_Quit();
-    return 0;
 }
+
