@@ -2,7 +2,7 @@
 #include <limits.h>
 //Ekaitz Dijkstra
 
-#define KOP 8
+#define KOP 8 //nodos
 
 typedef struct path{
 	int cost;
@@ -16,7 +16,7 @@ void copyPath(int *destVertex, int *destLen, int *srcVertex, int srcLen);
 
 int main()
 {
-	int infinite = INT_MAX, start = 0, end = 4;
+	int infinite = INT_MAX, start = 4, end = 7;
 	PATH path;
 uint grafiko[KOP][KOP] = {
 		{infinite,10,3,8,infinite,infinite,infinite,infinite},		//A
