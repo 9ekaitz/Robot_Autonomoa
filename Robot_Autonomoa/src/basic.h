@@ -8,7 +8,7 @@
 
 	void refresh(SDL_Renderer *render);
 
-	void launch(SDL_Renderer **render, pNODO_IMG *img_header);
+	void launch(SDL_Renderer **render, pNODO_IMG *img_header, char img[]);
 
 	void renderObjects(SDL_Renderer **render, NODO_IMG *img_header);
 

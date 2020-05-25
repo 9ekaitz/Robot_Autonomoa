@@ -40,7 +40,7 @@ int windowandRender(SDL_Window **window, SDL_Renderer **render)
 }
 
 
-void refresh(SDL_Renderer *render)	//dena marrasten du
+void refresh(SDL_Renderer *render)	//dena marrazten du
 {
 	SDL_RenderPresent(render);
 }
@@ -75,7 +75,7 @@ void renderObjects(SDL_Renderer **render, NODO_IMG *img_header)
 
 }
 
-void launch(SDL_Renderer **render, pNODO_IMG *img_header)
+void launch(SDL_Renderer **render, pNODO_IMG *img_header, char img[])
 {
 	load_image(img_header, *render, "./media/Interfaz.bmp", -1,-1,-1,-1);
 

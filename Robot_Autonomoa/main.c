@@ -4,7 +4,7 @@
 #include "image.h"
 #include "basic.h"
 
-//Ekaitz
+//Gorka grafikoa
 int main(int argc, char* argv[]) {
 
 	SDL_bool run = SDL_TRUE;

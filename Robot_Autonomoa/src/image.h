@@ -1,6 +1,8 @@
 #ifndef SRC_IMAGE_H_
 #define SRC_IMAGE_H_
 
+#define MAP "./media/Interfaz.bmp"
+
 	typedef struct Image{		//Argazkiak eta pantailan irudikatzeko behar dutren datu guztiak
 		SDL_Texture* texture;
 		SDL_Rect dim;
