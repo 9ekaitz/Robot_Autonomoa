@@ -16,17 +16,19 @@ void copyPath(int *destVertex, int *destLen, int *srcVertex, int srcLen);
 
 int main()
 {
-	int infinite = INT_MAX, start = 4, end = 7;
+
+	int infinite = INT_MAX, start = 0, end = 7;
+
 	PATH path;
 uint grafiko[KOP][KOP] = {
-		{infinite,10,3,8,infinite,infinite,infinite,infinite},		//A
-		{10,0,8,infinite,6,infinite,infinite,infinite},		//B
-		{3,8,0,4,infinite,9,infinite,infinite},				//C
-		{8,infinite,4,0,infinite,infinite,7,infinite},		//D
-		{infinite,6,infinite,infinite,0,3,infinite,11},		//E
-		{infinite,infinite,9,infinite,3,0,1,8},				//F
-		{infinite,infinite,infinite,7,infinite,1,0,5},		//G
-		{infinite,infinite,infinite,infinite,11,8,5,0}		//H
+		{infinite,10,3,8,infinite,infinite,infinite,infinite},			//A
+		{10,infinite,8,infinite,6,infinite,infinite,infinite},			//B
+		{3,8,infinite,4,infinite,9,infinite,infinite},					//C
+		{8,infinite,4,infinite,infinite,infinite,7,infinite},			//D
+		{infinite,6,infinite,infinite,infinite,3,infinite,11},			//E
+		{infinite,infinite,9,infinite,3,infinite,1,8},					//F
+		{infinite,infinite,infinite,7,infinite,1,infinite,5},			//G
+		{infinite,infinite,infinite,infinite,11,8,5,infinite}			//H
 };
 
 	path = dijkstra(grafiko, start, end);
@@ -41,12 +43,13 @@ PATH dijkstra(uint matrix[KOP][KOP], int start, int end)
 	int visited[KOP];
 	int min, pos, min_pos;
 
+	//iniciar todo ha 0
 	for (int i = 0; i < KOP; i++)
 	{
 		map[i].cost = infinite;
 		map[i].len = 0;
 		visited[i] = 0;
-		if (matrix[start][i] < map[i].cost)
+		if (matrix[start][i] < infinite)
 		{
 			map[i].cost = matrix[start][i];
 			map[i].vertex[map[i].len] = start;
@@ -66,6 +69,8 @@ PATH dijkstra(uint matrix[KOP][KOP], int start, int end)
 		{
 			if (visited[pos])
 			{
+				//j es la letra a la que estas mirando
+				//mira la siguiente ruta mas pequeña
 				for (int j = 0; j < KOP; j++)
 				{
 					if (!visited[j] && (matrix[pos][j] + map[pos].cost) < (matrix[min_pos][min] + map[min_pos].cost))
@@ -76,6 +81,7 @@ PATH dijkstra(uint matrix[KOP][KOP], int start, int end)
 				}
 			}
 		}
+		//comprueba si la nueva ruta es mas pequeña para ir a un nodo que la que ya teniamos
 		for (int i = 0; i < KOP; i++)
 		{
 			printf("%d\n", matrix[min][i] + map[min].cost);
@@ -87,7 +93,7 @@ PATH dijkstra(uint matrix[KOP][KOP], int start, int end)
 				map[i].len++;
 			}
 		}
-		visited[min] = 1;
+		visited[min] = 1;//marcas el nodo como visitado
 	}
 	return map[end];
 }
