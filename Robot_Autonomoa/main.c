@@ -1,38 +1,82 @@
-#include "SDL2/SDL.h"
+
 #include <stdio.h>
+#include <math.h>
+typedef struct coordenadas {
+
+	 double x;
+	 double y;
+
+
+} COORDENADAS;
 
 int main(int argc, char* argv[]) {
 
-	SDL_Window *window;                    // Declare a pointer
+	//crear extructura
+	printf("esta haciendo cosas de matrices\n");
 
-    SDL_Init(SDL_INIT_VIDEO);              // Initialize SDL2
+	int pixely=2;
+	int pixelx=2;
 
-    // Create an application window with the following settings:
-    window = SDL_CreateWindow(
-        "An SDL2 window",                  // window title
-        SDL_WINDOWPOS_UNDEFINED,           // initial x position
-        SDL_WINDOWPOS_UNDEFINED,           // initial y position
-        640,                               // width, in pixels
-        480,                               // height, in pixels
-        SDL_WINDOW_OPENGL                  // flags - see below
-    );
+	int x=1;
+	//esto es lo que metes en la funcion
+	double coordenaday=0;
+	double coordenadax=0;
 
-    // Check that the window was successfully created
-    //tiput amadre
-    if (window == NULL) {
-        // In the case that the window could not be made...
-        printf("Could not create window: %s\n", SDL_GetError());
-        return 1;
-    }
 
-    // The window is open: could enter program loop here (see SDL_PollEvent())
 
-    SDL_Delay(3000);  // Pause execution for 3000 milliseconds, for example
+	int tamanodeimagenX=6616;
+	int tamanodeimagenY=3765;
 
-    // Close and destroy the window
-    SDL_DestroyWindow(window);
+	double modulo_ab=0;
+	double modulo_ac=0;
 
-    // Clean up
-    SDL_Quit();
+	double cachosy;
+	double cachosx;
+
+	COORDENADAS Upper_Left;//A
+	COORDENADAS Lower_Left;//B
+	COORDENADAS Upper_Right;//C
+
+
+	//A
+	Upper_Left.x=-220611.986;
+	Upper_Left.y=5361961.764;
+
+	//B
+	Lower_Left.x=-220611.986;
+	Lower_Left.y=5360844.969;
+
+
+
+
+	//C
+	Upper_Right.x=-218649.510;
+	Upper_Right.y=5361961.764;
+
+
+
+
+//creo los modulos para saber las distancias
+modulo_ab=sqrt(pow(Upper_Left.x-Lower_Left.x,2)+pow(Upper_Left.y-Lower_Left.y,2));
+
+
+
+modulo_ac=sqrt(pow(Upper_Left.x-Upper_Right.x,2)+pow(Upper_Left.y-Upper_Right.y,2));
+
+
+//calculo cuntos tengo que sumar a la cordenada A para llegar a la cordenada C
+cachosy=modulo_ab/tamanodeimagenY;
+cachosx=modulo_ac/tamanodeimagenX;
+
+
+//aqui podria estar mal
+
+//saco la cordenada X e Y de pixeles a las de gps "EPSG:3857"
+
+coordenaday=Upper_Left.y-(cachosy*pixely);
+
+coordenadax=Upper_Left.x+(cachosx*pixelx);
+
+
     return 0;
 }
