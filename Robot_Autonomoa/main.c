@@ -11,7 +11,7 @@ int main()
 
 	while (aukera != 0)
 	{
-		printf("----------------------\n0. Irten\n1. Matrizea sortu\n2. Matrizea konprobatu\n----------------------\n");
+		printf("----------------------\n0. Irten\n1. Matrizea sortu\n2. Matrizea konprobatu\n3. Matrizea sinplifikatu\n----------------------\n");
 		fgets(str, 128, stdin);
 		sscanf(str, "%d", &aukera);
 
@@ -23,7 +23,8 @@ int main()
 		case 2:
 			matrizeaKonprobatuExec();
 			break;
-
+		case 3:
+			matrizeaSinplifikatu();
 		}
 	}
 

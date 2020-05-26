@@ -5,9 +5,9 @@
 void matrizeaSortuExec()
 {
 	int fila[ELEMENTO_FILA_MAX];
-	FILE* fitxategia = fopen("matrizea.txt", "w"); //"a" para seguir sin borrar el txt
+	FILE* fitxategia = fopen("matrizea.txt", "a"); //"a" para seguir sin borrar el txt
 
-	for (int i = 0; i < ELEMENTO_FILA_MAX; i++)
+	for (int i = 90; i < ELEMENTO_FILA_MAX; i++)
 	{
 		filaJaso(fila, i);
 		FilaSortu(fila, fitxategia);
@@ -75,3 +75,38 @@ void filaGarbitu(int fila[])
 	}
 }
 
+void matrizeaSinplifikatu()
+{
+	int tmp, x, zaborra, z;
+	char str[256][128], aux[32];
+
+	FILE *fitxategia = fopen("distancia.csv", "r");
+	FILE *fitxategiadest = fopen("distanciaRECT", "w");
+	for (int j; j < 1; j++)
+	{
+		for (int i = 0; i < 256; i++)
+		{
+			fscanf(fitxategia, "%s", str[i]);
+		}
+		do
+		{
+			printf("Kord %i:", j);
+			fgets(aux, 32, stdin);
+			sscanf(aux, "%d", &x);
+			z = 0;
+			while (z < 206)
+			{
+				sscanf(str[z], "\"%d\",\"%d", &zaborra, &tmp);
+				if (x > 0 && tmp == x)
+				{
+					fprintf(fitxategiadest, "%s\n", str[z]);
+					break;
+				}
+				z++;
+			}
+
+		}while (x != -1);
+	}
+	fclose(fitxategia);
+	fclose(fitxategiadest);
+}

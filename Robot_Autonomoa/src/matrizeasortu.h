@@ -7,5 +7,6 @@ void FilaSortu(int fila[], FILE* fitxategia);
 void filaJaso(int fila[], int punto);
 void filaGarbitu(int fila[]);
 void matrizeaSortuExec();
+void matrizeaSinplifikatu();
 
 #endif /* MATRIZEASORTU_H_ */
