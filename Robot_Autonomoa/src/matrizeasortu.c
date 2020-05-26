@@ -77,35 +77,47 @@ void filaGarbitu(int fila[])
 
 void matrizeaSinplifikatu()
 {
-	int tmp, x, zaborra, z;
-	char str[256][128];
-
 	FILE *fitxategia = fopen("distancia.csv", "r");
 	FILE *fitxategiaINPUT = fopen("input", "r");
 	FILE *fitxategiadest = fopen("distanciaRECT", "w");
-	for (int j; j < 2; j++)
+
+	int i, zaborra, x, tmp;
+	char str[256][256];
+
+
+		//	fscanf(fitxategia, "%s", str[i]);
+		//fscanf(fitxategiaINPUT, "%d", &x);
+		//sscanf(str[z], "\"%d\",\"%d", &zaborra, &tmp);
+		//	fprintf(fitxategiadest, "%s\n", str[z]);
+	for (int z = 0; z < 196; z++)
 	{
-		for (int i = 0; i < 256; i++)
+		i = 0;
+		fscanf(fitxategia, "%s", str[0]);
+		sscanf(str[0], "\"%d", &zaborra);
+		while (zaborra == z +1)
 		{
 			fscanf(fitxategia, "%s", str[i]);
+			sscanf(str[i], "\"%d", &zaborra);
+			i++;
 		}
 		do
 		{
 			fscanf(fitxategiaINPUT, "%d", &x);
-			z = 0;
-			while (z < 206)
+			if (x != -1)
 			{
-				sscanf(str[z], "\"%d\",\"%d", &zaborra, &tmp);
-				if (x > 0 && tmp == x)
+				for (int j = 0; j < i; j++)
 				{
-					fprintf(fitxategiadest, "%s\n", str[z]);
-					break;
+					sscanf(str[j], "\"%d\",\"%d", &zaborra, &tmp);
+					if (x == tmp)
+					{
+						fprintf(fitxategiadest, "%s\n", str[j]);
+					}
 				}
-				z++;
 			}
-
-		}while (x != -1);
+		}while ( x != -1);
 	}
+
+
 	fclose(fitxategiaINPUT);
 	fclose(fitxategia);
 	fclose(fitxategiadest);
