@@ -78,11 +78,12 @@ void filaGarbitu(int fila[])
 void matrizeaSinplifikatu()
 {
 	int tmp, x, zaborra, z;
-	char str[256][128], aux[32];
+	char str[256][128];
 
 	FILE *fitxategia = fopen("distancia.csv", "r");
+	FILE *fitxategiaINPUT = fopen("input", "r");
 	FILE *fitxategiadest = fopen("distanciaRECT", "w");
-	for (int j; j < 1; j++)
+	for (int j; j < 2; j++)
 	{
 		for (int i = 0; i < 256; i++)
 		{
@@ -90,9 +91,7 @@ void matrizeaSinplifikatu()
 		}
 		do
 		{
-			printf("Kord %i:", j);
-			fgets(aux, 32, stdin);
-			sscanf(aux, "%d", &x);
+			fscanf(fitxategiaINPUT, "%d", &x);
 			z = 0;
 			while (z < 206)
 			{
@@ -107,6 +106,7 @@ void matrizeaSinplifikatu()
 
 		}while (x != -1);
 	}
+	fclose(fitxategiaINPUT);
 	fclose(fitxategia);
 	fclose(fitxategiadest);
 }
