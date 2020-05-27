@@ -78,8 +78,8 @@ void filaGarbitu(int fila[])
 void matrizeaSinplifikatu()
 {
 	FILE *fitxategia = fopen("distancia.csv", "r");
-	FILE *fitxategiaINPUT = fopen("input", "r");
-	FILE *fitxategiadest = fopen("distanciaRECT", "w");
+	FILE *fitxategiaINPUT = fopen("input_U.txt", "r");
+	FILE *fitxategiadest = fopen("distanciaRECT_U", "w");
 
 	int i, zaborra, x, tmp;
 	char str[256][256];
@@ -117,8 +117,120 @@ void matrizeaSinplifikatu()
 		}while ( x != -1);
 	}
 
-
 	fclose(fitxategiaINPUT);
 	fclose(fitxategia);
 	fclose(fitxategiadest);
 }
+
+void matrizeaSortu_v2()
+{
+	FILE *fitxategia = fopen("distanciaRECT", "r");
+	FILE *fitxategiadest = fopen("gros_dat", "w");
+
+	fpos_t position;
+
+	int id, to, j = 0, exit;
+	double data[196], tmp;
+	char str[6][256];
+
+	fgetpos(fitxategia, &position);
+	for (int x = 0; x < 196; x++)
+	{
+		for (int i = 0; i < 196; i++)
+		{
+			data[i] = -1;
+		}
+		exit = 0;
+		j = 0;
+		do
+		{
+			fgetpos(fitxategia, &position);
+			fscanf(fitxategia, "%s", str[j]);
+			sscanf(str[j], "\"%d\",\"%d\",%lf", &id, &to, &tmp);
+			if (id != x+1)
+			{
+				fsetpos(fitxategia, &position);
+				exit = 1;
+			}
+			else
+			{
+				data[to-1] = tmp;
+			}
+			j++;
+		} while (!exit);
+		for (int i = 0; i < 196; i++)
+		{
+			fprintf(fitxategiadest, "%lf ", data[i]);
+		}
+		fputs("\n", fitxategiadest);
+	}
+	fclose(fitxategia);
+	fclose(fitxategiadest);
+
+}
+
+void BmatrizeaSortu_v2()
+{
+	FILE *fitxategia = fopen("gros_dat", "r");
+	FILE *fitxategiadest = fopen("gros.dat", "w");
+
+	double data;
+
+	for (int i = 0; i < 196; i++)
+	{
+		fscanf(fitxategia, "%lf ", &data);
+		fwrite(&data, sizeof(double), 1, fitxategiadest);
+	}
+
+	fclose(fitxategia);
+	fclose(fitxategiadest);
+
+}
+
+void matrizeaSortu_v2_Binario()
+{
+	FILE *fitxategia = fopen("distanciaRECT", "r");
+	FILE *fitxategiadest = fopen("gros.dat", "w");
+
+	fpos_t position;
+
+	int id, to, j = 0, exit;
+	double data[196], tmp;
+	char str[6][256];
+
+	fgetpos(fitxategia, &position);
+	for (int x = 0; x < 196; x++)
+	{
+		for (int i = 0; i < 196; i++)
+		{
+			data[i] = -1;
+		}
+		exit = 0;
+		j = 0;
+		do
+		{
+			fgetpos(fitxategia, &position);
+			fscanf(fitxategia, "%s", str[j]);
+			sscanf(str[j], "\"%d\",\"%d\",%lf", &id, &to, &tmp);
+			if (id != x+1)
+			{
+				fsetpos(fitxategia, &position);
+				exit = 1;
+			}
+			else
+			{
+				data[to-1] = tmp;
+			}
+			j++;
+		} while (!exit);
+		for (int i = 0; i < 196; i++)
+		{
+			fwrite(&data[i], sizeof(double), 1, fitxategiadest);
+		}
+	}
+	fclose(fitxategia);
+	fclose(fitxategiadest);
+}
+
+
+

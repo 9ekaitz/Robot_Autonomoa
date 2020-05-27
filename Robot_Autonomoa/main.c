@@ -11,7 +11,7 @@ int main()
 
 	while (aukera != 0)
 	{
-		printf("----------------------\n0. Irten\n1. Matrizea sortu\n2. Matrizea konprobatu\n3. Matrizea sinplifikatu\n----------------------\n");
+		printf("----------------------\n0. Irten\n1. Matrizea sortu\n2. Matrizea konprobatu\n3. Matrizea sinplifikatu\n4. Matriza berria\n5. Matrizea bin\n----------------------\n");
 		fgets(str, 128, stdin);
 		sscanf(str, "%d", &aukera);
 
@@ -25,6 +25,13 @@ int main()
 			break;
 		case 3:
 			matrizeaSinplifikatu();
+			break;
+		case 4:
+			matrizeaSortu_v2();
+			break;
+		case 5:
+			matrizeaSortu_v2_Binario();
+			break;
 		}
 	}
 
