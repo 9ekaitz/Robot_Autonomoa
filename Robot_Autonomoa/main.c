@@ -16,6 +16,9 @@ int main(int argc, char* argv[]) {
     NODO_IMG *img_header = NULL;
     MAP *map;
 
+    int x;
+    int y;
+
     windowandRender(&window, &render);
 
     launch(&render, &img_header, &map);
@@ -28,6 +31,8 @@ int main(int argc, char* argv[]) {
     	if (SDL_TICKS_PASSED(SDL_GetTicks(), check_rate))
     	{
     		checkEvents(&run, &img_header);
+    		SDL_GetMouseState(&x, &y);
+    		printf("x:%d  y:%d\n",x,y);
     		check_rate = SDL_GetTicks() + 10;		//100 checks sgunduro
     	}
     	if (SDL_TICKS_PASSED(SDL_GetTicks(), refresh_rate))
