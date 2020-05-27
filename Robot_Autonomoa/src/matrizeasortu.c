@@ -194,9 +194,11 @@ void matrizeaSortu_v2_Binario()
 
 	fpos_t position;
 
-	int id, to, j = 0, exit;
+	int id, to, j = 0, exit, kop = 196;
 	double data[196], tmp;
 	char str[6][256];
+
+	fwrite(&kop, sizeof(int), 1, fitxategiadest);
 
 	fgetpos(fitxategia, &position);
 	for (int x = 0; x < 196; x++)
