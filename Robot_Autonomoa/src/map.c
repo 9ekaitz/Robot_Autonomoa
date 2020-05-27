@@ -33,11 +33,12 @@ void load_map(MAP **map, char mapDat[], char koordDat[])
 	{
 		for (int i = 0; i < tmp->size; i++)
 		{
-			fread(&read, sizeof(double), 1, mapFile);
+			fread(&read, sizeof(double), 1, koordFile);
 			tmp->koord[i].x = read;
-			fread(&read, sizeof(double), 1, mapFile);
+			fread(&read, sizeof(double), 1, koordFile);
 			tmp->koord[i].y = read;
 		}
+		fclose(koordFile);
 	}
 
 }
