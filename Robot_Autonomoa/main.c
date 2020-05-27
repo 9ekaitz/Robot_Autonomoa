@@ -6,7 +6,7 @@
 #include "basic.h"
 #include "event.h"
 
-//Ekaitz
+//Ekaitz  v2
 int main(int argc, char* argv[]) {
 
 	SDL_bool run = SDL_TRUE;
