@@ -8,11 +8,11 @@
 	}KOORD;
 
 	typedef struct map{
-		KOORD koord;
+		KOORD koord[MAX_MAP_LEN];
 		double mapMatrix[MAX_MAP_LEN][MAX_MAP_LEN];
 		int size;
 	}MAP;
 
-	void load_map(MAP **map, char src[]);
+	void load_map(MAP **map, char mapDat[], char koordDat[]);
 
 #endif /* SRC_MAP_H_ */
