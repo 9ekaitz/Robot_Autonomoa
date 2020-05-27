@@ -24,8 +24,8 @@ int main(int argc, char* argv[]) {
 
 
 
-	int tamanodeimagenX=6616;
-	int tamanodeimagenY=3765;
+	int tamanodeimagenX=10210;
+	int tamanodeimagenY=4993;
 
 	double modulo_ab=0;
 	double modulo_ac=0;
@@ -39,19 +39,19 @@ int main(int argc, char* argv[]) {
 
 
 	//A
-	Upper_Left.x=-220611.986;
-	Upper_Left.y=5361961.764;
+	Upper_Left.x=-1.9809783;
+	Upper_Left.y=43.3276273;
 
 	//B
-	Lower_Left.x=-220611.986;
-	Lower_Left.y=5360844.969;
+	Lower_Left.x=-1.9809783;
+	Lower_Left.y=43.3197019;
 
 
 
 
 	//C
-	Upper_Right.x=-218649.510;
-	Upper_Right.y=5361961.764;
+	Upper_Right.x=-1.9647722;
+	Upper_Right.y=43.3276273;
 
 
 
