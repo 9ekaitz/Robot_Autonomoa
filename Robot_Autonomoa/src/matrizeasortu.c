@@ -234,5 +234,26 @@ void matrizeaSortu_v2_Binario()
 	fclose(fitxategiadest);
 }
 
+void koordAtera()
+{
+	FILE *fitxategia = fopen("coord.csv", "r");
+	FILE *fitxategiadest = fopen("gros_koord.dat", "w");
 
+	int id;
+	double z, y;
+	char str[256];
+
+	for (int x = 0; x < 196; x++)
+	{
+		fscanf(fitxategia, "%s", str);
+		sscanf(str, "\"%lf\",\"%lf\",%i", &z, &y, &id);
+
+		fwrite(&z, sizeof(double), 1, fitxategiadest);
+		fwrite(&y, sizeof(double), 1, fitxategiadest);
+
+	}
+
+	fclose(fitxategia);
+	fclose(fitxategiadest);
+}
 
