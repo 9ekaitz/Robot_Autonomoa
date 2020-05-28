@@ -11,6 +11,8 @@
 
 	void txapar(SDL_Window *window, SDL_Renderer *render);
 
-	void destroy(pNODO_IMG *img_header, int content);
+	void destroyMap(MAP **map);
+
+	void destroyRender(pNODO_IMG *img_header, int content);
 
 #endif /* SRC_BASIC_H_ */

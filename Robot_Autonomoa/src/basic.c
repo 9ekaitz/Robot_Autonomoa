@@ -59,9 +59,9 @@ void renderObjects(SDL_Renderer **render, NODO_IMG *img_header)
 
 	while (aux != NULL)
 	{
-		if (aux->img->dim.w != -1) dst = &aux->img->dim;
+		if (aux->img->dim.x != -1) dst = &aux->img->dim;
 		else dst = NULL;
-		if (aux->img->scroll.w != -1) src = &aux->img->scroll;
+		if (aux->img->scroll.x != -1) src = &aux->img->scroll;
 		else src = NULL;
 
 		SDL_RenderCopy(*render, aux->img->texture, src, dst);
@@ -84,7 +84,7 @@ void renderObjects(SDL_Renderer **render, NODO_IMG *img_header)
 
 void launch(SDL_Renderer **render, pNODO_IMG *img_header, MAP **map)
 {
-	load_image(img_header, *render, "./media/mapa.bmp", -1,-1,-1,-1);
+	load_image(img_header, *render, "./media/gross.bmp", -1, -1, 6873, 2912);
 	load_map(map, "gros.dat", "gross_koord.dat");
 
 	renderObjects(render, *img_header);
@@ -97,7 +97,16 @@ void txapar(SDL_Window *window, SDL_Renderer *render)
     SDL_DestroyRenderer(render);
 }
 
-void destroy(pNODO_IMG *img_header, int content)
+void destroyMap(MAP **map)
+{
+	if (*map != NULL)
+	{
+		free(*map);
+		*map = NULL;
+	}
+}
+
+void destroyRender(pNODO_IMG *img_header, int content)
 {
 	pNODO_IMG aux, tmp;
 

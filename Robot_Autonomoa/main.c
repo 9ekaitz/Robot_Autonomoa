@@ -15,9 +15,7 @@ int main(int argc, char* argv[]) {
     Uint32 refresh_rate = 0, check_rate = 0;
     NODO_IMG *img_header = NULL;
     MAP *map;
-
-    int x;
-    int y;
+    PIXELKOORD mouse;
 
     windowandRender(&window, &render);
 
@@ -30,9 +28,8 @@ int main(int argc, char* argv[]) {
     {
     	if (SDL_TICKS_PASSED(SDL_GetTicks(), check_rate))
     	{
+    		checkMouse(&mouse, img_header->img);
     		checkEvents(&run, &img_header);
-    		SDL_GetMouseState(&x, &y);
-    		printf("x:%d  y:%d\n",x,y);
     		check_rate = SDL_GetTicks() + 10;		//100 checks sgunduro
     	}
     	if (SDL_TICKS_PASSED(SDL_GetTicks(), refresh_rate))
@@ -43,8 +40,8 @@ int main(int argc, char* argv[]) {
     	}
     }
 
-//    destroy(&map, 0);
-    destroy(&img_header, 1);
+    destroyMap(&map);
+    destroyRender(&img_header, 1);
 
     txapar(window, render);
     SDL_Quit();

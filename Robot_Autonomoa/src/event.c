@@ -19,16 +19,28 @@ void checkEvents(SDL_bool* run, pNODO_IMG *img_header)
 				switch (event.key.keysym.scancode)		// SWITCH PARA LAS PULSACIONES DE TECLAS
 				{
 				case SDL_SCANCODE_UP:
-					(*img_header)->img->scroll.y -= 15;
+					if ((*img_header)->img->scroll.y >= 15)
+					{
+						(*img_header)->img->scroll.y -= 15;
+					}
 					break;
 				case SDL_SCANCODE_DOWN:
-					(*img_header)->img->scroll.y += 15;
+					if ((*img_header)->img->scroll.y + PANTAILA_ALTUERA <= (*img_header)->img->dim.h - 15)
+					{
+						(*img_header)->img->scroll.y += 15;
+					}
 					break;
 				case SDL_SCANCODE_RIGHT:
-					(*img_header)->img->scroll.x += 15;
+					if ((*img_header)->img->scroll.x + PANTAILA_ZABALERA <= (*img_header)->img->dim.w-15)
+					{
+						(*img_header)->img->scroll.x += 15;
+					}
 					break;
 				case SDL_SCANCODE_LEFT:
-					(*img_header)->img->scroll.x -= 15;
+					if ((*img_header)->img->scroll.x >= 15)
+					{
+						(*img_header)->img->scroll.x -= 15;
+					}
 					break;
 				default:
 					break;
@@ -39,7 +51,7 @@ void checkEvents(SDL_bool* run, pNODO_IMG *img_header)
 				{
 					case SDL_SCANCODE_RETURN:
 						printf("prueba");
-						rectBuilder(&(*img_header)->img->scroll, 0,0, PANTAILA_ZABALERA*2, PANTAILA_ALTUERA*2);
+						rectBuilder(&(*img_header)->img->scroll, 0,0, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
 						break;
 					case SDL_SCANCODE_ESCAPE:
 						*run = SDL_FALSE;
@@ -54,3 +66,14 @@ void checkEvents(SDL_bool* run, pNODO_IMG *img_header)
 		}
 	}
 }
+
+void checkMouse(PIXELKOORD *mouse, IMG *background)
+{
+	int x, y;
+
+	SDL_GetMouseState(&x, &y);
+	mouse->x = x + background->scroll.x;
+	mouse->y = y + background->scroll.y;
+	printf("x: %d\ty: %d\n", mouse->x, mouse->y);
+}
+
