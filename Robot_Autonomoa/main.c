@@ -14,8 +14,8 @@ int main(int argc, char* argv[]) {
 	//crear extructura
 	printf("esta haciendo cosas de matrices\n");
 
-	int pixely=2;
-	int pixelx=2;
+	int pixely=1538;
+	int pixelx=383;
 
 	int x=1;
 	//esto es lo que metes en la funcion
@@ -24,8 +24,8 @@ int main(int argc, char* argv[]) {
 
 
 
-	int tamanodeimagenX=10210;
-	int tamanodeimagenY=4993;
+	int tamanodeimagenX=6873;
+	int tamanodeimagenY=2912;
 
 	double modulo_ab=0;
 	double modulo_ac=0;
@@ -39,19 +39,16 @@ int main(int argc, char* argv[]) {
 
 
 	//A
-	Upper_Left.x=-1.9809783;
-	Upper_Left.y=43.3276273;
+	Upper_Left.x=-1.9802276;
+	Upper_Left.y=43.3271173;
 
 	//B
-	Lower_Left.x=-1.9809783;
-	Lower_Left.y=43.3197019;
-
-
-
+	Lower_Left.x=-1.9802276;
+	Lower_Left.y=43.3206861;
 
 	//C
-	Upper_Right.x=-1.9647722;
-	Upper_Right.y=43.3276273;
+	Upper_Right.x=-1.9650484;
+	Upper_Right.y=43.3271173;
 
 
 
