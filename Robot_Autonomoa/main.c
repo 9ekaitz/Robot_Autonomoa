@@ -22,14 +22,20 @@ int main(int argc, char* argv[])
 	            while (!done) {
 	                SDL_Event event;
 
+	                // DIBUJAR CON COORDENADAS
 	                printf("\nx1, y1:");
 	                fgets(str, 128, stdin);
 	                sscanf(str, "%d %d", &x2, &y2);
-	                /////////////
 	                LerroaMarraztu(renderer, x1, y1, x2, y2);
 	                x1 = x2;
 	                y1 = y2;
-	                /////////////
+	                /*
+	                printf("\nx1, y1, x2, y2:");
+	                fgets(str, 128, stdin);
+	                sscanf(str, "%d %d %d %d", &x1, &y1, &x2, &y2);
+
+	                printf("\nDistantzia: %f", GeoDistantzia(x1, x2, y1, y2));*/
+
 	                while (SDL_PollEvent(&event)) {
 	                    if (event.type == SDL_QUIT) {
 	                        done = SDL_TRUE;
