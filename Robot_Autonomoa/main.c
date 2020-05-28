@@ -21,9 +21,6 @@ int main(int argc, char* argv[]) {
 
     launch(&render, &img_header, &map);
 
-    SDL_Delay(3000);
-
-
     while (run)
     {
     	if (SDL_TICKS_PASSED(SDL_GetTicks(), check_rate))
@@ -47,5 +44,3 @@ int main(int argc, char* argv[]) {
     SDL_Quit();
     return 0;
 }
-
-

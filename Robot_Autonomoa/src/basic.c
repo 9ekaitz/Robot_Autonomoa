@@ -85,7 +85,7 @@ void renderObjects(SDL_Renderer **render, NODO_IMG *img_header)
 void launch(SDL_Renderer **render, pNODO_IMG *img_header, MAP **map)
 {
 	load_image(img_header, *render, "./media/gross.bmp", -1, -1, 6873, 2912);
-	load_map(map, "gros.dat", "gross_koord.dat");
+	load_map(map, "gros.dat", "gros_koord.dat");
 
 	renderObjects(render, *img_header);
 	refresh(*render);

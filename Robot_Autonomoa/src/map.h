@@ -4,6 +4,8 @@
 	#define MAX_MAP_LEN 200
 	#define EARTH_R 6378.137
 	#define PI 3.14159265358979323846
+	#define IMG_HEIGHT 2912
+	#define IMG_WIDTH 6873
 
 	typedef struct koord{
 		double x, y;
