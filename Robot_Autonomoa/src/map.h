@@ -2,10 +2,16 @@
 #define SRC_MAP_H_
 
 	#define MAX_MAP_LEN 200
+	#define EARTH_R 6378.137
+	#define PI 3.14159265358979323846
 
 	typedef struct koord{
 		double x, y;
 	}KOORD;
+
+	typedef struct PixelKoord{
+		int x, y;
+	}PIXELKOORD;
 
 	typedef struct map{
 		KOORD koord[MAX_MAP_LEN];

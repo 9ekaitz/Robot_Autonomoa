@@ -1,4 +1,5 @@
 #include "image.h"
+#include "map.h"
 #include "event.h"
 
 void checkEvents(SDL_bool* run, pNODO_IMG *img_header)
