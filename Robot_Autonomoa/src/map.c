@@ -43,15 +43,16 @@ void load_map(MAP **map, char mapDat[], char koordDat[])
 	}
 }
 
-int nearestPoint(KOORD koord, int dim, PIXELKOORD mouse)
+int nearestPoint(KOORD koord[], int dim, PIXELKOORD mouse)
 {
 	int pos;
 	double min = INT_MAX, dist;
 	KOORD tmp;
+	tmp = pixelToCoord(mouse);
 	for (int i = 0; i < dim; i++)
 	{
-		tmp = pixelToCoord(mouse);
-		dist = distance(koord.x, koord.y, tmp.x, tmp.y);
+
+		dist = distance(koord[i].x, koord[i].y, tmp.x, tmp.y);
 		if (dist < min)
 		{
 			min = dist;
@@ -64,7 +65,7 @@ int nearestPoint(KOORD koord, int dim, PIXELKOORD mouse)
 
 KOORD pixelToCoord(PIXELKOORD pixel)
 {
-	double gap_x, gap_y, coord_x, coord_y, width_c, height_c;
+	double gap_x, gap_y, width_c, height_c;
 
 	KOORD Upper_Left;//A
 	KOORD Lower_Left;//B

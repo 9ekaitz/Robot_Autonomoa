@@ -1,8 +1,9 @@
+#include "status.h"
 #include "image.h"
 #include "map.h"
 #include "event.h"
 
-void checkEvents(SDL_bool* run, pNODO_IMG *img_header)
+void checkEvents(STATUS *app, pNODO_IMG *img_header, ROUTE *route, MAP *map)
 {
 	SDL_Event event;
 
@@ -10,11 +11,17 @@ void checkEvents(SDL_bool* run, pNODO_IMG *img_header)
 	{
 		switch (event.type)
 		{
-			//*Pantaila += 1;//esto no sirve de nada
 			case SDL_QUIT:
-				*run = SDL_FALSE;
+				app->run = SDL_FALSE;
 				break;
 			case SDL_MOUSEBUTTONUP:
+				checkMouse((*img_header)->img, event.button, app, route, map);
+				if (app->current == LA_RUTASE_ESTA_CALCULANDO)
+				{
+					dijkstra_dijknoestra();
+					aparecerKotxe();
+					app->current = ONROUTE;
+				}
 				break;
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.scancode)		// SWITCH PARA LAS PULSACIONES DE TECLAS
@@ -55,7 +62,7 @@ void checkEvents(SDL_bool* run, pNODO_IMG *img_header)
 						rectBuilder(&(*img_header)->img->scroll, 0,0, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
 						break;
 					case SDL_SCANCODE_ESCAPE:
-						*run = SDL_FALSE;
+						app->run = SDL_FALSE;
 						break;
 					default:
 						break;
@@ -68,13 +75,34 @@ void checkEvents(SDL_bool* run, pNODO_IMG *img_header)
 	}
 }
 
-void checkMouse(PIXELKOORD *mouse, IMG *background)
+void checkMouse(SDL_MouseButtonEvent event, STATUS *app, ROUTE *route, MAP *map)
 {
 	int x, y;
-
+	PIXELKOORD mouse;
 	SDL_GetMouseState(&x, &y);
-	mouse->x = x + background->scroll.x;
-	mouse->y = y + background->scroll.y;
-	printf("x: %d\ty: %d\n", mouse->x, mouse->y);
-}
+	mouse.x = x*6873/PANTAILA_ZABALERA;
+	mouse.y = y*2912/PANTAILA_ALTUERA ;
 
+	switch (event.button)
+	{
+		case SDL_BUTTON_LEFT:
+			if (app->current == SELECT)
+			{
+				route->points[route->kop] = nearestPoint(map->koord, map->size, mouse);
+				route->kop++;
+				if (route->kop == 2)
+				{
+					app->current = LA_RUTASE_ESTA_CALCULANDO;
+				}
+			}
+			break;
+
+		case SDL_BUTTON_RIGHT:
+
+			break;
+
+		case SDL_BUTTON_MIDDLE:
+
+			break;
+	}
+}

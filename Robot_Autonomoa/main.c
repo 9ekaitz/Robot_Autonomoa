@@ -1,32 +1,34 @@
 #include "SDL2/SDL.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "status.h"
 #include "image.h"
 #include "map.h"
 #include "basic.h"
 #include "event.h"
 
 //Ekaitz  v2
-int main(int argc, char* argv[]) {
+int main()
+{
 
-	SDL_bool run = SDL_TRUE;
+	STATUS app= {SDL_TRUE, SELECT};
     SDL_Window *window;                    // Declare a pointer
     SDL_Renderer *render;
     Uint32 refresh_rate = 0, check_rate = 0;
     NODO_IMG *img_header = NULL;
     MAP *map;
     PIXELKOORD mouse;
+    ROUTE route = {{-1,-1},0};
 
     windowandRender(&window, &render);
 
     launch(&render, &img_header, &map);
 
-    while (run)
+    while (app.run)
     {
     	if (SDL_TICKS_PASSED(SDL_GetTicks(), check_rate))
     	{
-    		checkMouse(&mouse, img_header->img);
-    		checkEvents(&run, &img_header);
+    		checkEvents(&app, &img_header, &route, map);
     		check_rate = SDL_GetTicks() + 10;		//100 checks sgunduro
     	}
     	if (SDL_TICKS_PASSED(SDL_GetTicks(), refresh_rate))

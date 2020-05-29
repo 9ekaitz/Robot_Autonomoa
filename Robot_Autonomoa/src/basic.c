@@ -116,10 +116,11 @@ void destroyRender(pNODO_IMG *img_header, int content)
 	{
 		while (aux != NULL)
 		{
-			tmp = *img_header;
-			*img_header = (*img_header)->ptrNext;
+			tmp = aux;
+			aux = aux->ptrNext;
 			if (content) free(tmp->img);
 			free(tmp);
 		}
+		*img_header = NULL;
 	}
 }

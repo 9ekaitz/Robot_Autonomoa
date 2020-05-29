@@ -21,6 +21,17 @@
 		int size;
 	}MAP;
 
+	typedef struct route{
+		int points[2];
+		int kop;
+	}ROUTE;
+
 	void load_map(MAP **map, char mapDat[], char koordDat[]);
+
+	int nearestPoint(KOORD koord[], int dim, PIXELKOORD mouse);
+
+	KOORD pixelToCoord(PIXELKOORD pixel);
+
+	double distance(double lon1, double lat1, double lon2, double lat2);
 
 #endif /* SRC_MAP_H_ */
