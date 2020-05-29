@@ -15,59 +15,60 @@ void checkEvents(STATUS *app, pNODO_IMG *img_header, ROUTE *route, MAP *map)
 				app->run = SDL_FALSE;
 				break;
 			case SDL_MOUSEBUTTONUP:
-				checkMouse((*img_header)->img, event.button, app, route, map);
+				checkMouse(event.button, app, route, map);
 				if (app->current == LA_RUTASE_ESTA_CALCULANDO)
 				{
-					dijkstra_dijknoestra();
-					aparecerKotxe();
+					dijkstra(*map, route->points[0], route->points[1]);
+//					aparecerKotxe();
 					app->current = ONROUTE;
 				}
 				break;
-			case SDL_KEYDOWN:
-				switch (event.key.keysym.scancode)		// SWITCH PARA LAS PULSACIONES DE TECLAS
-				{
-				case SDL_SCANCODE_UP:
-					if ((*img_header)->img->scroll.y >= 15)
-					{
-						(*img_header)->img->scroll.y -= 15;
-					}
-					break;
-				case SDL_SCANCODE_DOWN:
-					if ((*img_header)->img->scroll.y + PANTAILA_ALTUERA <= (*img_header)->img->dim.h - 15)
-					{
-						(*img_header)->img->scroll.y += 15;
-					}
-					break;
-				case SDL_SCANCODE_RIGHT:
-					if ((*img_header)->img->scroll.x + PANTAILA_ZABALERA <= (*img_header)->img->dim.w-15)
-					{
-						(*img_header)->img->scroll.x += 15;
-					}
-					break;
-				case SDL_SCANCODE_LEFT:
-					if ((*img_header)->img->scroll.x >= 15)
-					{
-						(*img_header)->img->scroll.x -= 15;
-					}
-					break;
-				default:
-					break;
-				}
-				break;
-			case SDL_KEYUP:
-				switch (event.key.keysym.scancode)
-				{
-					case SDL_SCANCODE_RETURN:
-						printf("prueba");
-						rectBuilder(&(*img_header)->img->scroll, 0,0, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
-						break;
-					case SDL_SCANCODE_ESCAPE:
-						app->run = SDL_FALSE;
-						break;
-					default:
-						break;
-				}
-				break;
+				//momentuz ez daukagu teklarik
+//			case SDL_KEYDOWN:
+//				switch (event.key.keysym.scancode)		// SWITCH PARA LAS PULSACIONES DE TECLAS
+//				{
+//				case SDL_SCANCODE_UP:
+//					if ((*img_header)->img->scroll.y >= 15)
+//					{
+//						(*img_header)->img->scroll.y -= 15;
+//					}
+//					break;
+//				case SDL_SCANCODE_DOWN:
+//					if ((*img_header)->img->scroll.y + PANTAILA_ALTUERA <= (*img_header)->img->dim.h - 15)
+//					{
+//						(*img_header)->img->scroll.y += 15;
+//					}
+//					break;
+//				case SDL_SCANCODE_RIGHT:
+//					if ((*img_header)->img->scroll.x + PANTAILA_ZABALERA <= (*img_header)->img->dim.w-15)
+//					{
+//						(*img_header)->img->scroll.x += 15;
+//					}
+//					break;
+//				case SDL_SCANCODE_LEFT:
+//					if ((*img_header)->img->scroll.x >= 15)
+//					{
+//						(*img_header)->img->scroll.x -= 15;
+//					}
+//					break;
+//				default:
+//					break;
+//				}
+//				break;
+//			case SDL_KEYUP:
+//				switch (event.key.keysym.scancode)
+//				{
+//					case SDL_SCANCODE_RETURN:
+//						printf("prueba");
+//						rectBuilder(&(*img_header)->img->scroll, 0,0, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
+//						break;
+//					case SDL_SCANCODE_ESCAPE:
+//						app->run = SDL_FALSE;
+//						break;
+//					default:
+//						break;
+//				}
+//				break;
 			default:
 				break;
 

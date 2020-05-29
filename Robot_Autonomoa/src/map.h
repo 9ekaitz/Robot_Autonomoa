@@ -26,6 +26,13 @@
 		int kop;
 	}ROUTE;
 
+	typedef struct path{
+		float cost;
+		int vertex[MAX_MAP_LEN];
+		int len;
+	}PATH;
+
+
 	void load_map(MAP **map, char mapDat[], char koordDat[]);
 
 	int nearestPoint(KOORD koord[], int dim, PIXELKOORD mouse);
@@ -33,5 +40,9 @@
 	KOORD pixelToCoord(PIXELKOORD pixel);
 
 	double distance(double lon1, double lat1, double lon2, double lat2);
+
+	PATH dijkstra(MAP map, int start, int end);
+
+	void copyPath(int *destVertex, int *destLen, int *srcVertex, int srcLen);
 
 #endif /* SRC_MAP_H_ */
