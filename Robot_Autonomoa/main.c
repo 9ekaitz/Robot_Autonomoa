@@ -170,8 +170,28 @@ PIXEL Coord_to_Pixel(double coordenadax,double coordenaday)
 
 		pixel.y=(coordenadax-Upper_Left.x)/cachosx;
 
+		pixel.y=((coordenaday-Upper_Left.y)/-cachosy)+1;
+		pixel.x=(coordenadax-Upper_Left.x)/cachosx;
 
 
 
 return pixel;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
