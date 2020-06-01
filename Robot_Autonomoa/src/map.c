@@ -12,7 +12,7 @@ void load_map(MAP **map, char src[])
 	char koordDat[64];
 
 	strcpy(koordDat, src);
-	strcat(src, ".dat");
+	//strcat(src, ".dat");
 	strcat(koordDat, "_koord.dat");
 
 	mapFile= fopen(src, "r");
