@@ -13,6 +13,12 @@
 		int size;
 	}MAP;
 
+	typedef struct punto_azul{
+
+		KOORD koord;
+
+	}PUNTO_AZUL;
+
 	void load_map(MAP **map, char src[]);
 
 #endif /* SRC_MAP_H_ */

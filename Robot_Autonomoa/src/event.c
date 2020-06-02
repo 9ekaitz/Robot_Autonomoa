@@ -19,16 +19,78 @@ void checkEvents(SDL_bool* run, pNODO_IMG *img_header)
 				switch (event.key.keysym.scancode)		// SWITCH PARA LAS PULSACIONES DE TECLAS
 				{
 				case SDL_SCANCODE_UP:
-					(*img_header)->img->scroll.y -= 15;
+
+					if((*img_header)->ptrNext->img->dim.y>=PANTAILA_ALTUERA/2&&(*img_header)->ptrNext->img->dim.x>=PANTAILA_ZABALERA/2) //esto comprueba si el punto esta centrado en la pantalla
+					{
+						if((*img_header)->img->scroll.y >=0){
+						(*img_header)->img->scroll.y -= 30;
+						}else{
+							(*img_header)->ptrNext->img->dim.y -=5; //resta 5 al pixel y del punto y lo mueve hacia arriba
+						}
+					}else{
+						(*img_header)->ptrNext->img->dim.y -=5; //resta 5 al pixel y del punto y lo mueve hacia arriba
+					}
+
 					break;
 				case SDL_SCANCODE_DOWN:
-					(*img_header)->img->scroll.y += 15;
+					if((*img_header)->ptrNext->img->dim.y>=PANTAILA_ALTUERA/2&&(*img_header)->ptrNext->img->dim.x>=PANTAILA_ZABALERA/2) //esto comprueba si el punto esta centrado en la pantalla
+					{
+						if((*img_header)->img->scroll.y + PANTAILA_ALTUERA<= IRUDIAREN_ALTUERA)
+						{
+						(*img_header)->img->scroll.y += 30;
+						}
+						else{
+							(*img_header)->ptrNext->img->dim.y +=5; //suma 5 al pixel y del punto y lo mueve hacia abajo
+
+						}
+					}else//sin el else no podriamos mover el punto mas una vez
+					{
+						(*img_header)->ptrNext->img->dim.y +=5; //suma 5 al pixel y del punto y lo mueve hacia abajo
+
+
+					}
+
+
 					break;
 				case SDL_SCANCODE_RIGHT:
-					(*img_header)->img->scroll.x += 15;
+
+
+					if((*img_header)->ptrNext->img->dim.y>=PANTAILA_ALTUERA/2&&(*img_header)->ptrNext->img->dim.x>=PANTAILA_ZABALERA/2) //esto comprueba si el punto esta centrado en la pantalla
+					{
+						if(((*img_header)->img->scroll.x + PANTAILA_ZABALERA <= IRUDIAREN_ZABALERA))//esto hace que la pantalla no se valla a la derecha
+							{
+							(*img_header)->img->scroll.x += 30; //hace que el scrol se pueda mover a la derecha
+							}else{
+								(*img_header)->ptrNext->img->dim.x +=5;//suma 5 al pixel x del punto y lo mueve a la derecha
+
+							}
+					}else//sin el else no podriamos mover el punto mas de una vez
+					{
+						(*img_header)->ptrNext->img->dim.x +=5;//suma 5 al pixel x del punto y lo mueve a la derecha
+					}
+
+
 					break;
 				case SDL_SCANCODE_LEFT:
-					(*img_header)->img->scroll.x -= 15;
+
+					if((*img_header)->ptrNext->img->dim.y>=PANTAILA_ALTUERA/2&&(*img_header)->ptrNext->img->dim.x>=PANTAILA_ZABALERA/2) //esto comprueba si el punto esta centrado en la pantalla
+					{
+						if((*img_header)->img->scroll.x >=0) //esto hace que la pantalla no se valla a la izquierda
+						{
+						(*img_header)->img->scroll.x -= 30; //hace que el scrol se pueda mover a la izquierda
+						}
+						else
+						{
+
+							(*img_header)->ptrNext->img->dim.x -=5; //resta 5 al pixel x del punto y lo mueve a la izquierda
+						}
+					}
+					else//sin el else no podriamos mover el punto mas de una vez
+					{
+						(*img_header)->ptrNext->img->dim.x -=5;//resta 5 al pixel x del punto y lo mueve a la izquierda
+					}
+
+
 					break;
 				default:
 					break;
@@ -39,7 +101,7 @@ void checkEvents(SDL_bool* run, pNODO_IMG *img_header)
 				{
 					case SDL_SCANCODE_RETURN:
 						printf("prueba");
-						rectBuilder(&(*img_header)->img->scroll, 0,0, PANTAILA_ZABALERA*2, PANTAILA_ALTUERA*2);
+						rectBuilder(&(*img_header)->img->scroll, 0,0, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
 						break;
 					case SDL_SCANCODE_ESCAPE:
 						*run = SDL_FALSE;

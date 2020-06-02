@@ -16,9 +16,13 @@ int main(int argc, char* argv[]) {
     NODO_IMG *img_header = NULL;
     MAP *map;
 
+//abre la ventana
     windowandRender(&window, &render);
 
     launch(&render, &img_header, &map);
+
+
+
 
     SDL_Delay(3000);
 
@@ -29,6 +33,7 @@ int main(int argc, char* argv[]) {
     	{
     		checkEvents(&run, &img_header);
     		check_rate = SDL_GetTicks() + 10;		//100 checks sgunduro
+    		//SDL_BlitSurface();
     	}
     	if (SDL_TICKS_PASSED(SDL_GetTicks(), refresh_rate))
     	{

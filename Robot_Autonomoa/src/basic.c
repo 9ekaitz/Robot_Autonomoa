@@ -84,8 +84,12 @@ void renderObjects(SDL_Renderer **render, NODO_IMG *img_header)
 
 void launch(SDL_Renderer **render, pNODO_IMG *img_header, MAP **map)
 {
+
 	load_image(img_header, *render, "./media/mapa.bmp", -1,-1,-1,-1);
 	load_map(map, "gros");
+	load_image(img_header, *render, "./media/punto.bmp", PANTAILA_ZABALERA/2,PANTAILA_ALTUERA/2,100,100);
+
+
 
 	renderObjects(render, *img_header);
 	refresh(*render);
@@ -114,3 +118,4 @@ void destroy(pNODO_IMG *img_header, int content)
 		}
 	}
 }
+
