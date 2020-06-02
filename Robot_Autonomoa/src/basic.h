@@ -7,12 +7,16 @@
 
 	void launch(SDL_Renderer **render, pNODO_IMG *img_header, MAP **map);
 
-	void renderObjects(SDL_Renderer **render, NODO_IMG *img_header);
+	void renderBackground(SDL_Renderer **render, NODO_IMG *img_header);
+
+	void renderObjects(SDL_Renderer **render, NODO_IMG *img_header, PATH fastestPath, PROCCESS current);
 
 	void txapar(SDL_Window *window, SDL_Renderer *render);
 
 	void destroyMap(MAP **map);
 
 	void destroyRender(pNODO_IMG *img_header, int content);
+
+
 
 #endif /* SRC_BASIC_H_ */

@@ -1,4 +1,5 @@
 #include "SDL2/SDL.h"
+#include "map.h"
 #include "image.h"
 
 void load_image(pNODO_IMG *img_header, SDL_Renderer *render, char src[], int x, int y, int w, int h)
@@ -87,4 +88,39 @@ void rectBuilder(SDL_Rect *rect, int x, int y, int w, int h)
 	rect->y = y;
 	rect->w = w;
 	rect->h = h;
+}
+
+void drawLines(SDL_Renderer *render, PATH fastestPath)
+{
+	SDL_SetRenderDrawColor(render, 0, 0, 0, SDL_ALPHA_OPAQUE);
+
+	for (int i = 0; i < fastestPath.len-1; i++)
+	{
+		drawLine(render, fastestPath.vertex_koord[i], fastestPath.vertex_koord[i+1]);
+	}
+}
+
+void drawLine(SDL_Renderer *render, PIXELKOORD src, PIXELKOORD dst)
+{
+	SDL_RenderDrawLine(render, src.x, src.y, dst.x, dst.y);
+	SDL_RenderDrawLine(render, src.x, src.y+1, dst.x-1, dst.y);
+	SDL_RenderDrawLine(render, src.x, src.y+2, dst.x-2, dst.y);
+	SDL_RenderDrawLine(render, src.x, src.y+3, dst.x-3, dst.y);
+	SDL_RenderDrawLine(render, src.x+1, src.y, dst.x, dst.y-1);
+	SDL_RenderDrawLine(render, src.x+2, src.y, dst.x, dst.y-2);
+	SDL_RenderDrawLine(render, src.x+3, src.y, dst.x, dst.y-3);
+	SDL_RenderDrawLine(render, src.x, src.y, dst.x, dst.y);
+	SDL_RenderDrawLine(render, src.x, src.y+1, dst.x-1, dst.y);
+	SDL_RenderDrawLine(render, src.x, src.y+2, dst.x-2, dst.y);
+	SDL_RenderDrawLine(render, src.x, src.y+3, dst.x-3, dst.y);
+	SDL_RenderDrawLine(render, src.x+1, src.y, dst.x, dst.y-1);
+	SDL_RenderDrawLine(render, src.x+2, src.y, dst.x, dst.y-2);
+	SDL_RenderDrawLine(render, src.x+3, src.y, dst.x, dst.y-3);
+	SDL_RenderDrawLine(render, src.x, src.y, dst.x, dst.y);
+	SDL_RenderDrawLine(render, src.x, src.y+1, dst.x-1, dst.y);
+	SDL_RenderDrawLine(render, src.x, src.y+2, dst.x-2, dst.y);
+	SDL_RenderDrawLine(render, src.x, src.y+3, dst.x-3, dst.y);
+	SDL_RenderDrawLine(render, src.x+1, src.y, dst.x, dst.y-1);
+	SDL_RenderDrawLine(render, src.x+2, src.y, dst.x, dst.y-2);
+	SDL_RenderDrawLine(render, src.x+3, src.y, dst.x, dst.y-3);
 }

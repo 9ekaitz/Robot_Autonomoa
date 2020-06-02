@@ -73,14 +73,14 @@ KOORD pixelToCoord(PIXELKOORD pixel)
 	KOORD result;
 
 	//A
-	Upper_Left.x=-1.9802276;
-	Upper_Left.y=43.3271173;
+	Upper_Left.x=-1.9811692;
+	Upper_Left.y=43.3270931;
 	//B
-	Lower_Left.x=-1.9802276;
-	Lower_Left.y=43.3206861;
+	Lower_Left.x=-1.9811692;
+	Lower_Left.y=43.3210206;
 	//C
-	Upper_Right.x=-1.9650484;
-	Upper_Right.y=43.3271173;
+	Upper_Right.x=-1.9653983;
+	Upper_Right.y=43.3270931;
 
 
 	//creo los modulos para saber las distancias
@@ -123,16 +123,14 @@ PIXELKOORD coordToPixel(KOORD point)
 	PIXELKOORD result;
 
 	//A
-	Upper_Left.x=-1.9802276;
-	Upper_Left.y=43.3271173;
-
+	Upper_Left.x=-1.9811692;
+	Upper_Left.y=43.3270931;
 	//B
-	Lower_Left.x=-1.9802276;
-	Lower_Left.y=43.3206861;
-
+	Lower_Left.x=-1.9811692;
+	Lower_Left.y=43.3210206;
 	//C
-	Upper_Right.x=-1.9650484;
-	Upper_Right.y=43.3271173;
+	Upper_Right.x=-1.9653983;
+	Upper_Right.y=43.3270931;
 
 	//creo los modulos para saber las distancias
 	width_c = sqrt(pow(Upper_Left.x-Upper_Right.x,2)+pow(Upper_Left.y-Upper_Right.y,2));
@@ -206,6 +204,8 @@ PATH dijkstra(MAP map, int start, int end)
 		}
 		visited[min] = 1;//marcas el nodo como visitado
 	}
+	paths[end].vertex[paths[end].len] = end;
+	paths[end].len++;
 	return paths[end];
 }
 
@@ -216,4 +216,12 @@ void copyPath(int *destVertex, int *destLen, int *srcVertex, int srcLen)
 		*(destVertex + i) = *(srcVertex + i);
 	}
 	*destLen = srcLen;
+}
+
+void fillPathKoord(KOORD map[], PATH *fastestPath)
+{
+	for (int i = 0; i < fastestPath->len; i++)
+	{
+		fastestPath->vertex_koord[i] = coordToPixel(map[fastestPath->vertex[i]]);
+	}
 }

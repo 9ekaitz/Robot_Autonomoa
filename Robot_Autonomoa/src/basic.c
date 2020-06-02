@@ -1,7 +1,9 @@
 #include "SDL2/SDL.h"
-#include "image.h"
 #include "map.h"
+#include "image.h"
+#include "status.h"
 #include "basic.h"
+
 
 
 int windowandRender(SDL_Window **window, SDL_Renderer **render)
@@ -47,24 +49,55 @@ void refresh(SDL_Renderer *render)	//dena marrasten du
 	SDL_RenderPresent(render);
 }
 
-void renderObjects(SDL_Renderer **render, NODO_IMG *img_header)
+void renderBackground(SDL_Renderer **render, NODO_IMG *img_header)
 {
-	pNODO_IMG aux;
 	SDL_Rect *src, *dst;
 
 	SDL_SetRenderDrawColor(*render, 0, 0, 0, 255);	//Kolorea ezarri
 	SDL_RenderClear(*render);	//Pantaila esandako kolorearekin garbitu
 
+	if (img_header->img->dim.x != -1) dst = &img_header->img->dim;
+	else dst = NULL;
+	if (img_header->img->scroll.x != -1) src = &img_header->img->scroll;
+	else src = NULL;
+
+	SDL_RenderCopy(*render, img_header->img->texture, src, dst);
+
+}
+
+void renderObjects(SDL_Renderer **render, NODO_IMG *img_header, PATH fastestPath, PROCCESS current)
+{
+	pNODO_IMG aux;
+	SDL_Rect aux2;
+
 	aux = img_header;
+
+	if (aux != NULL)
+	{
+		aux = aux->ptrNext;
+	}
+	if (current == ONROUTE) drawLines(*render, fastestPath);
+
 
 	while (aux != NULL)
 	{
-		if (aux->img->dim.x != -1) dst = &aux->img->dim;
-		else dst = NULL;
-		if (aux->img->scroll.x != -1) src = &aux->img->scroll;
-		else src = NULL;
-
-		SDL_RenderCopy(*render, aux->img->texture, src, dst);
+		aux2.w = aux->img->dim.w;
+		aux2.h = aux->img->dim.h;
+		if (img_header->img->scroll.x < 0)
+		{
+			aux2.x = ((float)aux->img->dim.x / (float)IMG_WIDTH) * PANTAILA_ZABALERA;
+			aux2.y = ((float)aux->img->dim.y / (float)IMG_HEIGHT) * PANTAILA_ALTUERA;
+			aux2.x -= aux2.w/2;
+			aux2.y -= aux2.h;
+		}
+		else
+		{
+			aux2.x = aux->img->dim.x - img_header->img->scroll.x;
+			aux2.y = aux->img->dim.y - img_header->img->scroll.y;
+//			aux2.w *= 2;
+//			aux2.h *= 2;
+		}
+		SDL_RenderCopy(*render, aux->img->texture, NULL, &aux2);
 		aux = aux->ptrNext;
 	}
 	/*
@@ -84,10 +117,10 @@ void renderObjects(SDL_Renderer **render, NODO_IMG *img_header)
 
 void launch(SDL_Renderer **render, pNODO_IMG *img_header, MAP **map)
 {
-	load_image(img_header, *render, "./media/gross.bmp", -1, -1, 6873, 2912);
+	load_image(img_header, *render, "./media/gros5.bmp", -1, -1, 5002, 1926);
 	load_map(map, "gros.dat", "gros_koord.dat");
 
-	renderObjects(render, *img_header);
+	renderBackground(render, *img_header);
 	refresh(*render);
 }
 

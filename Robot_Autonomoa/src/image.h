@@ -25,4 +25,8 @@
 
 	void rectBuilder(SDL_Rect *rect, int x, int y, int w, int h);
 
+	void drawLines(SDL_Renderer *render, PATH fastestPath);
+
+	void drawLine(SDL_Renderer *render, PIXELKOORD src, PIXELKOORD dst);
+
 #endif /* SRC_IMAGE_H_ */
