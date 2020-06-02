@@ -94,8 +94,6 @@ void renderObjects(SDL_Renderer **render, NODO_IMG *img_header, PATH fastestPath
 		{
 			aux2.x = aux->img->dim.x - img_header->img->scroll.x;
 			aux2.y = aux->img->dim.y - img_header->img->scroll.y;
-//			aux2.w *= 2;
-//			aux2.h *= 2;
 		}
 		SDL_RenderCopy(*render, aux->img->texture, NULL, &aux2);
 		aux = aux->ptrNext;
