@@ -76,7 +76,7 @@ void renderObjects(SDL_Renderer **render, NODO_IMG *img_header, PATH fastestPath
 	{
 		aux = aux->ptrNext;
 	}
-	if (current == ONROUTE) drawLines(*render, fastestPath);
+	if (current == ONROUTE) drawLines(img_header, *render, fastestPath);
 
 
 	while (aux != NULL)
@@ -87,14 +87,14 @@ void renderObjects(SDL_Renderer **render, NODO_IMG *img_header, PATH fastestPath
 		{
 			aux2.x = ((float)aux->img->dim.x / (float)IMG_WIDTH) * PANTAILA_ZABALERA;
 			aux2.y = ((float)aux->img->dim.y / (float)IMG_HEIGHT) * PANTAILA_ALTUERA;
-			aux2.x -= aux2.w/2;
-			aux2.y -= aux2.h;
 		}
 		else
 		{
 			aux2.x = aux->img->dim.x - img_header->img->scroll.x;
 			aux2.y = aux->img->dim.y - img_header->img->scroll.y;
 		}
+		aux2.x -= aux2.w/2;
+		aux2.y -= aux2.h;
 		SDL_RenderCopy(*render, aux->img->texture, NULL, &aux2);
 		aux = aux->ptrNext;
 	}

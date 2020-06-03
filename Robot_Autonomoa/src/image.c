@@ -90,37 +90,38 @@ void rectBuilder(SDL_Rect *rect, int x, int y, int w, int h)
 	rect->h = h;
 }
 
-void drawLines(SDL_Renderer *render, PATH fastestPath)
+void drawLines(NODO_IMG *img_header, SDL_Renderer *render, PATH fastestPath)
 {
-	SDL_SetRenderDrawColor(render, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(render, 255, 80, 80, SDL_ALPHA_OPAQUE);
 
 	for (int i = 0; i < fastestPath.len-1; i++)
 	{
-		drawLine(render, fastestPath.vertex_koord[i], fastestPath.vertex_koord[i+1]);
+		drawLine(img_header, render, fastestPath.vertex_koord[i], fastestPath.vertex_koord[i+1]);
 	}
 }
 
-void drawLine(SDL_Renderer *render, PIXELKOORD src, PIXELKOORD dst)
+void drawLine(NODO_IMG *img_header, SDL_Renderer *render, PIXELKOORD src, PIXELKOORD dst)
 {
+	if (img_header->img->scroll.x < 0)
+	{
+		src.x = ((float)src.x / (float)IMG_WIDTH) * PANTAILA_ZABALERA;
+		src.y = ((float)src.y / (float)IMG_HEIGHT) * PANTAILA_ALTUERA;
+		dst.x = ((float)dst.x / (float)IMG_WIDTH) * PANTAILA_ZABALERA;
+		dst.y = ((float)dst.y / (float)IMG_HEIGHT) * PANTAILA_ALTUERA;
+	}
+	else
+	{
+		src.x -= img_header->img->scroll.x;
+		src.y -= img_header->img->scroll.y;
+		dst.x -= img_header->img->scroll.x;
+		dst.y -= img_header->img->scroll.y;
+	}
+
 	SDL_RenderDrawLine(render, src.x, src.y, dst.x, dst.y);
 	SDL_RenderDrawLine(render, src.x, src.y+1, dst.x-1, dst.y);
-	SDL_RenderDrawLine(render, src.x, src.y+2, dst.x-2, dst.y);
-	SDL_RenderDrawLine(render, src.x, src.y+3, dst.x-3, dst.y);
+//	SDL_RenderDrawLine(render, src.x, src.y+2, dst.x-2, dst.y);
+//	SDL_RenderDrawLine(render, src.x, src.y+3, dst.x-3, dst.y);
 	SDL_RenderDrawLine(render, src.x+1, src.y, dst.x, dst.y-1);
-	SDL_RenderDrawLine(render, src.x+2, src.y, dst.x, dst.y-2);
-	SDL_RenderDrawLine(render, src.x+3, src.y, dst.x, dst.y-3);
-	SDL_RenderDrawLine(render, src.x, src.y, dst.x, dst.y);
-	SDL_RenderDrawLine(render, src.x, src.y+1, dst.x-1, dst.y);
-	SDL_RenderDrawLine(render, src.x, src.y+2, dst.x-2, dst.y);
-	SDL_RenderDrawLine(render, src.x, src.y+3, dst.x-3, dst.y);
-	SDL_RenderDrawLine(render, src.x+1, src.y, dst.x, dst.y-1);
-	SDL_RenderDrawLine(render, src.x+2, src.y, dst.x, dst.y-2);
-	SDL_RenderDrawLine(render, src.x+3, src.y, dst.x, dst.y-3);
-	SDL_RenderDrawLine(render, src.x, src.y, dst.x, dst.y);
-	SDL_RenderDrawLine(render, src.x, src.y+1, dst.x-1, dst.y);
-	SDL_RenderDrawLine(render, src.x, src.y+2, dst.x-2, dst.y);
-	SDL_RenderDrawLine(render, src.x, src.y+3, dst.x-3, dst.y);
-	SDL_RenderDrawLine(render, src.x+1, src.y, dst.x, dst.y-1);
-	SDL_RenderDrawLine(render, src.x+2, src.y, dst.x, dst.y-2);
-	SDL_RenderDrawLine(render, src.x+3, src.y, dst.x, dst.y-3);
+//	SDL_RenderDrawLine(render, src.x+2, src.y, dst.x, dst.y-2);
+//	SDL_RenderDrawLine(render, src.x+3, src.y, dst.x, dst.y-3);
 }
