@@ -21,6 +21,8 @@ void checkEvents(SDL_Renderer *render, STATUS *app, pNODO_IMG *img_header, ROUTE
 				{
 					point = coordToPixel(map->koord[route->points[0]]);
 					load_image(img_header, render, "./media/pointer.bmp", point.x, point.y, 30, 40);
+					load_image(img_header, render, "./media/punto.bmp", point.x, point.y, 30, 40); //3. en la lisa
+
 				}
 				if (route->kop == 2)
 				{

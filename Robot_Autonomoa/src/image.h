@@ -29,4 +29,6 @@
 
 	void drawLine(NODO_IMG *img_header, SDL_Renderer *render, PIXELKOORD src, PIXELKOORD dst);
 
-#endif /* SRC_IMAGE_H_ */
+	void mover_punto(NODO_IMG *img_header, PIXELKOORD src, PIXELKOORD dst);
+
+	#endif /* SRC_IMAGE_H_ */

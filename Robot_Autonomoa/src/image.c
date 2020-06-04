@@ -97,7 +97,17 @@ void drawLines(NODO_IMG *img_header, SDL_Renderer *render, PATH fastestPath)
 	for (int i = 0; i < fastestPath.len-1; i++)
 	{
 		drawLine(img_header, render, fastestPath.vertex_koord[i], fastestPath.vertex_koord[i+1]);
+
+
 	}
+
+	static int x=0;
+
+
+
+
+		mover_punto(img_header, fastestPath.vertex_koord[0], fastestPath.vertex_koord[0+1]);
+
 }
 
 void drawLine(NODO_IMG *img_header, SDL_Renderer *render, PIXELKOORD src, PIXELKOORD dst)
@@ -115,6 +125,9 @@ void drawLine(NODO_IMG *img_header, SDL_Renderer *render, PIXELKOORD src, PIXELK
 		src.y -= img_header->img->scroll.y;
 		dst.x -= img_header->img->scroll.x;
 		dst.y -= img_header->img->scroll.y;
+
+
+
 	}
 
 	SDL_RenderDrawLine(render, src.x, src.y, dst.x, dst.y);
@@ -124,4 +137,51 @@ void drawLine(NODO_IMG *img_header, SDL_Renderer *render, PIXELKOORD src, PIXELK
 	SDL_RenderDrawLine(render, src.x+1, src.y, dst.x, dst.y-1);
 //	SDL_RenderDrawLine(render, src.x+2, src.y, dst.x, dst.y-2);
 //	SDL_RenderDrawLine(render, src.x+3, src.y, dst.x, dst.y-3);
+
 }
+
+void mover_punto(NODO_IMG *img_header, PIXELKOORD src, PIXELKOORD dst)
+{
+	int vel=10;
+	int x=img_header->ptrNext->ptrNext->img->dim.x;
+	int y=img_header->ptrNext->ptrNext->img->dim.y;
+
+		//	src.x -= img_header->img->scroll.x;
+			//src.y -= img_header->img->scroll.y;
+
+	float m=(float)(dst.y-src.y)/(float)(dst.x-src.x);//calculamos la malda
+
+
+	if(m<0)
+	{
+	vel=vel*-1;
+	}
+
+	if(dst.x>src.x&&src.y>dst.y)
+	{
+		vel=vel*-1;
+	}
+
+
+
+	x += vel;
+
+	y +=vel*m;
+
+//y=m*(x-src.x)+src.y;
+
+
+			//img_header->img->scroll.x = src.x;
+			//img_header->img->scroll.y = src.y;
+
+			img_header->ptrNext->ptrNext->img->dim.x=x;
+			img_header->ptrNext->ptrNext->img->dim.y=y;
+
+SDL_Delay(100);
+
+}
+
+
+
+
+

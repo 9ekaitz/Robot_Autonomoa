@@ -76,7 +76,11 @@ void renderObjects(SDL_Renderer **render, NODO_IMG *img_header, PATH fastestPath
 	{
 		aux = aux->ptrNext;
 	}
-	if (current == ONROUTE) drawLines(img_header, *render, fastestPath);
+	if (current == ONROUTE)
+		{
+		drawLines(img_header, *render, fastestPath);
+
+		}
 
 
 	while (aux != NULL)
@@ -117,7 +121,7 @@ void launch(SDL_Renderer **render, pNODO_IMG *img_header, MAP **map)
 {
 	load_image(img_header, *render, "./media/gros5.bmp", -1, -1, 5002, 1926);
 	load_map(map, "gros.dat", "gros_koord.dat");
-
+	//load_image(img_header, *render, "./media/punto.bmp", PANTAILA_ZABALERA/2,PANTAILA_ALTUERA/2,100,100);
 	renderBackground(render, *img_header);
 	refresh(*render);
 }
