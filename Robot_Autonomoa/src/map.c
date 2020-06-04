@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include <limits.h>
 #include <math.h>
 #include "map.h"
@@ -224,4 +225,70 @@ void fillPathKoord(KOORD map[], PATH *fastestPath)
 	{
 		fastestPath->vertex_koord[i] = coordToPixel(map[fastestPath->vertex[i]]);
 	}
+}
+
+PATH A_star(MAP map, int start, int end)
+{
+	PATH paths[map.size];
+	int infinite = INT_MAX;
+	int visited[map.size];
+	int min, pos, min_pos;
+
+	double heuristics[map.size];
+
+	//iniciar todo ha 0
+	for (int i = 0; i < map.size; i++)
+	{
+		paths[i].cost = infinite;
+		paths[i].len = 0;
+		visited[i] = 0;
+		if (map.mapMatrix[start][i] < infinite)
+		{
+			paths[i].cost = map.mapMatrix[start][i];
+			paths[i].vertex[paths[i].len] = start;
+			paths[i].len++;
+		}
+		heuristics[i] = distance(map.koord[i].x, map.koord[i].y, map.koord[end].x, map.koord[end].y);
+	}
+
+	paths[start].cost = 0;
+	paths[start].vertex[0] = start;
+	paths[start].len = 1;
+	visited[start] = 1;
+	while (!visited[end])
+	{
+		min = start;
+		min_pos = start;
+		for (pos = 0; pos < map.size; pos++)
+		{
+			if (visited[pos])
+			{
+				//j es la letra a la que estas mirando
+				//mira la siguiente ruta mas pequeña
+				for (int j = 0; j < map.size; j++)
+				{
+					if (!visited[j] && (map.mapMatrix[pos][j] + paths[pos].cost + heuristics[j]) < (map.mapMatrix[min_pos][min] + paths[min_pos].cost) + heuristics[min])
+					{
+						min = j;
+						min_pos = pos;
+					}
+				}
+			}
+		}
+		//comprueba si la nueva ruta es mas pequeña para ir a un nodo que la que ya teniamos
+		for (int i = 0; i < map.size; i++)
+		{
+			if (map.mapMatrix[min][i] + paths[min].cost < paths[i].cost)
+			{
+				paths[i].cost = map.mapMatrix[min][i] + paths[min].cost;
+				copyPath(paths[i].vertex, &paths[i].len, paths[min].vertex, paths[min].len);
+				paths[i].vertex[paths[i].len] = min;
+				paths[i].len++;
+			}
+		}
+		visited[min] = 1;//marcas el nodo como visitado
+	}
+	paths[end].vertex[paths[end].len] = end;
+	paths[end].len++;
+	return paths[end];
 }

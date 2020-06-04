@@ -1,18 +1,24 @@
 #include "SDL2/SDL.h"
 #include "map.h"
-#include "image.h"
+#include "graphic.h"
 #include "status.h"
 #include "basic.h"
 
 
 
-int windowandRender(SDL_Window **window, SDL_Renderer **render)
+int windowandRender(SDL_Window **window, SDL_Renderer **render, TTF_Font **font)
 {
 	// SDL hasi
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Ezin izan da SDL hasieratu: %s", SDL_GetError());
 		return -1;
 	}
+
+	if(TTF_Init()==-1) {
+	    printf("TTF_Init: %s\n", TTF_GetError());
+	    return -1;
+	}
+	*font = TTF_OpenFont("./media/digital.TTF", 100);
 	// Lehioa sortu eta ezaugarriak zehaztu
 
 	*window = SDL_CreateWindow(
@@ -49,76 +55,61 @@ void refresh(SDL_Renderer *render)	//dena marrasten du
 	SDL_RenderPresent(render);
 }
 
-void renderBackground(SDL_Renderer **render, NODO_IMG *img_header)
+void renderBackground(SDL_Renderer **render, BACKGROUND *background)
 {
 	SDL_Rect *src, *dst;
 
 	SDL_SetRenderDrawColor(*render, 0, 0, 0, 255);	//Kolorea ezarri
 	SDL_RenderClear(*render);	//Pantaila esandako kolorearekin garbitu
 
-	if (img_header->img->dim.x != -1) dst = &img_header->img->dim;
+	if (background->dim.x != -1) dst = &background->dim;
 	else dst = NULL;
-	if (img_header->img->scroll.x != -1) src = &img_header->img->scroll;
+	if (background->scroll.x != -1) src = &background->scroll;
 	else src = NULL;
 
-	SDL_RenderCopy(*render, img_header->img->texture, src, dst);
+	SDL_RenderCopy(*render, background->texture, src, dst);
 
 }
 
-void renderObjects(SDL_Renderer **render, NODO_IMG *img_header, PATH fastestPath, PROCCESS current)
+void renderObjects(SDL_Renderer **render, BACKGROUND *background, NODO_OBJ *header, PATH fastestPath, PROCCESS current)
 {
-	pNODO_IMG aux;
+	NODO_OBJ *aux;
 	SDL_Rect aux2;
 
-	aux = img_header;
+	aux = header;
 
-	if (aux != NULL)
-	{
-		aux = aux->ptrNext;
-	}
-	if (current == ONROUTE) drawLines(img_header, *render, fastestPath);
-
+	if (current == ONROUTE) drawLines(background, *render, fastestPath);
 
 	while (aux != NULL)
 	{
-		aux2.w = aux->img->dim.w;
-		aux2.h = aux->img->dim.h;
-		if (img_header->img->scroll.x < 0)
+		//Scroll-a dela eta argazkiak eskalatzeko eta leku egokian kokatzeko
+		aux2.w = aux->obj->dim.w;
+		aux2.h = aux->obj->dim.h;
+		if (background->scroll.x < 0)
 		{
-			aux2.x = ((float)aux->img->dim.x / (float)IMG_WIDTH) * PANTAILA_ZABALERA;
-			aux2.y = ((float)aux->img->dim.y / (float)IMG_HEIGHT) * PANTAILA_ALTUERA;
+			aux2.x = ((float)aux->obj->dim.x / (float)IMG_WIDTH) * PANTAILA_ZABALERA;
+			aux2.y = ((float)aux->obj->dim.y / (float)IMG_HEIGHT) * PANTAILA_ALTUERA;
 		}
 		else
 		{
-			aux2.x = aux->img->dim.x - img_header->img->scroll.x;
-			aux2.y = aux->img->dim.y - img_header->img->scroll.y;
+			aux2.x = aux->obj->dim.x - background->scroll.x;
+			aux2.y = aux->obj->dim.y - background->scroll.y;
 		}
+		//Argazkiaren 0,0 puntua "aldatu"
 		aux2.x -= aux2.w/2;
 		aux2.y -= aux2.h;
-		SDL_RenderCopy(*render, aux->img->texture, NULL, &aux2);
+		//Render
+		SDL_RenderCopy(*render, aux->obj->texture, NULL, &aux2);
 		aux = aux->ptrNext;
 	}
-	/*
-	 *  \brief Copy a portion of the texture to the current rendering target.
-	 *
-	 *  \param renderer The renderer which should copy parts of a texture.
-	 *  \param texture The source texture.
-	 *  \param srcrect   A pointer to the source rectangle, or NULL for the entire
-	 *                   texture.
-	 *  \param dstrect   A pointer to the destination rectangle, or NULL for the
-	 *                   entire rendering target.
-	 *
-	 *  \return 0 on success, or -1 on error
-	 */
-
 }
 
-void launch(SDL_Renderer **render, pNODO_IMG *img_header, MAP **map)
+void launch(SDL_Renderer **render, pBACKGROUND *background, MAP **map)
 {
-	load_image(img_header, *render, "./media/gros5.bmp", -1, -1, 5002, 1926);
-	load_map(map, "gros.dat", "gros_koord.dat");
+	load_background(background, *render, "./media/gros5.bmp", 5002, 1926);	//mapa kargatu, src, w, h
+	load_map(map, "gros.dat", "gros_koord.dat");	//maparen datuak kargatu, distantzia matrizea eta koordenatuak
 
-	renderBackground(render, *img_header);
+	renderBackground(render, *background);	//pantaila renderizatu
 	refresh(*render);
 }
 
@@ -137,11 +128,11 @@ void destroyMap(MAP **map)
 	}
 }
 
-void destroyRender(pNODO_IMG *img_header, int content)
+void destroyObjects(pNODO_OBJ *header, int content)
 {
-	pNODO_IMG aux, tmp;
+	pNODO_OBJ aux, tmp;
 
-	aux = *img_header;
+	aux = *header;
 
 	if (aux != NULL)
 	{
@@ -149,9 +140,18 @@ void destroyRender(pNODO_IMG *img_header, int content)
 		{
 			tmp = aux;
 			aux = aux->ptrNext;
-			if (content) free(tmp->img);
+			if (content) free(tmp->obj);
 			free(tmp);
 		}
-		*img_header = NULL;
+		*header = NULL;
+	}
+}
+
+void destroyBackground(pBACKGROUND *background)	 //maparen argazkia memoriatik ezabatu
+{
+	if (*background != NULL)
+	{
+		free(*background);
+		*background = NULL;
 	}
 }

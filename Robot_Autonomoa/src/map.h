@@ -50,4 +50,6 @@
 
 	void fillPathKoord(KOORD map[], PATH *fastestPath);
 
+	PATH A_star(MAP map, int start, int end);
+
 #endif /* SRC_MAP_H_ */

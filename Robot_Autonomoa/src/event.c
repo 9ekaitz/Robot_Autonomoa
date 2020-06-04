@@ -1,9 +1,9 @@
 #include "status.h"
 #include "map.h"
-#include "image.h"
+#include "graphic.h"
 #include "event.h"
 
-void checkEvents(SDL_Renderer *render, STATUS *app, pNODO_IMG *img_header, ROUTE *route, MAP *map, PATH *fastestPath)
+void checkEvents(SDL_Renderer *render, BACKGROUND *background, STATUS *app, pNODO_OBJ *header, ROUTE *route, MAP *map, PATH *fastestPath, TTF_Font *font, SDL_Color color)
 {
 	SDL_Event event;
 	PIXELKOORD point;
@@ -20,19 +20,19 @@ void checkEvents(SDL_Renderer *render, STATUS *app, pNODO_IMG *img_header, ROUTE
 				if (route->kop == 1)
 				{
 					point = coordToPixel(map->koord[route->points[0]]);
-					load_image(img_header, render, "./media/pointer.bmp", point.x, point.y, 30, 40);
+					load_image(header, render, "./media/pointer.bmp", point.x, point.y, 30, 40);
 				}
 				if (route->kop == 2)
 				{
 					point = coordToPixel(map->koord[route->points[1]]);
-					load_image(img_header, render, "./media/meta.bmp", point.x, point.y, 37, 40);
+					load_image(header, render, "./media/meta.bmp", point.x, point.y, 37, 40);
 					route->kop = 0;
 				}
 				if (app->current == LA_RUTA_SE_ESTA_CALCULANDO)
 				{
-					*fastestPath = dijkstra(*map, route->points[0], route->points[1]);
+					*fastestPath = A_star(*map, route->points[0], route->points[1]);
 					fillPathKoord(map->koord, fastestPath);
-
+					load_font(header, render, fastestPath->cost, font, color);
 //					aparecerKotxe();
 					app->current = ONROUTE;
 				}
@@ -42,27 +42,27 @@ void checkEvents(SDL_Renderer *render, STATUS *app, pNODO_IMG *img_header, ROUTE
 				switch (event.key.keysym.scancode)		// SWITCH PARA LAS PULSACIONES DE TECLAS
 				{
 				case SDL_SCANCODE_UP:
-					if ((*img_header)->img->scroll.y >= 15)
+					if (background->scroll.y >= 15)
 					{
-						(*img_header)->img->scroll.y -= 15;
+						background->scroll.y -= 15;
 					}
 					break;
 				case SDL_SCANCODE_DOWN:
-					if ((*img_header)->img->scroll.y + PANTAILA_ALTUERA <= (*img_header)->img->dim.h - 15)
+					if (background->scroll.y + PANTAILA_ALTUERA <= background->dim.h - 15)
 					{
-						(*img_header)->img->scroll.y += 15;
+						background->scroll.y += 15;
 					}
 					break;
 				case SDL_SCANCODE_RIGHT:
-					if ((*img_header)->img->scroll.x + PANTAILA_ZABALERA <= (*img_header)->img->dim.w-15)
+					if (background->scroll.x + PANTAILA_ZABALERA <= background->dim.w-15)
 					{
-						(*img_header)->img->scroll.x += 15;
+						background->scroll.x += 15;
 					}
 					break;
 				case SDL_SCANCODE_LEFT:
-					if ((*img_header)->img->scroll.x >= 15)
+					if (background->scroll.x >= 15)
 					{
-						(*img_header)->img->scroll.x -= 15;
+						background->scroll.x -= 15;
 					}
 					break;
 				default:
@@ -73,8 +73,7 @@ void checkEvents(SDL_Renderer *render, STATUS *app, pNODO_IMG *img_header, ROUTE
 				switch (event.key.keysym.scancode)
 				{
 					case SDL_SCANCODE_RETURN:
-						printf("prueba");
-						rectBuilder(&(*img_header)->img->scroll, 0,0, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
+						rectBuilder(&background->scroll, 0,0, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
 						break;
 					case SDL_SCANCODE_ESCAPE:
 						app->run = SDL_FALSE;
