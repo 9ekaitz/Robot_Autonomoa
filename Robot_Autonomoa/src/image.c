@@ -104,9 +104,19 @@ void drawLines(NODO_IMG *img_header, SDL_Renderer *render, PATH fastestPath)
 	static int x=0;
 
 
+//si la X,Y de la imagen pasa la X,Y del siguiente nodo entra.
+
+	int static kk=0;
+
+//	if(img_header->ptrNext->ptrNext->img->dim.x >= fastestPath.vertex_koord[kk+1].x && img_header->ptrNext->ptrNext->img->dim.y >= fastestPath.vertex_koord[kk+1].y)
+//	{
+//		kk++;
+//	}
+
+	kk +=caniar_de_punto(img_header, fastestPath.vertex_koord[kk], fastestPath.vertex_koord[kk+1]);
 
 
-		mover_punto(img_header, fastestPath.vertex_koord[0], fastestPath.vertex_koord[0+1]);
+	mover_punto(img_header, fastestPath.vertex_koord[kk], fastestPath.vertex_koord[kk+1]);
 
 }
 
@@ -160,11 +170,11 @@ void mover_punto(NODO_IMG *img_header, PIXELKOORD src, PIXELKOORD dst)
 	if(dst.x>src.x&&src.y>dst.y)
 	{
 		vel=vel*-1;
-
 	}
 
 
-	if(m>0&&dst.x<src.x&&dst.y<src.y){
+	if(m>0&&dst.x<src.x&&dst.y<src.y)
+	{
 	vel=vel*-1;
 	}
 
@@ -185,6 +195,77 @@ SDL_Delay(100);
 
 }
 
+int caniar_de_punto(NODO_IMG *img_header, PIXELKOORD src, PIXELKOORD dst)
+{
+		int variable = 0;
+
+		int vel=10;
+
+		int x=img_header->ptrNext->ptrNext->img->dim.x;//de la foto
+		int y=img_header->ptrNext->ptrNext->img->dim.y;//de la foto
+
+
+
+			//	src.x -= img_header->img->scroll.x;
+				//src.y -= img_header->img->scroll.y;
+
+		float m=(float)(dst.y-src.y)/(float)(dst.x-src.x);//calculamos la malda
+
+
+		if(m<0)
+		{
+		vel=vel*-1;
+		}
+
+		if(dst.x>src.x&&src.y>dst.y)
+		{
+			vel=vel*-1;
+
+		}
+
+
+		if(m>0&&dst.x<src.x&&dst.y<src.y)
+		{
+		vel=vel*-1;
+		}
+
+if (m>0&&vel<0) {
+
+	if (y <= dst.y && x <=dst.x)
+	{
+		variable=1;
+	}
+
+
+}
+
+
+
+
+
+
+
+/*mira aqui tonto
+	if(vel<0){
+
+		if(img_header->ptrNext->ptrNext->img->dim.x <= dst.x && img_header->ptrNext->ptrNext->img->dim.y <= dst.y)
+			{
+			variable=1;
+			}
+
+	}else{
+		if(img_header->ptrNext->ptrNext->img->dim.x >= dst.x && img_header->ptrNext->ptrNext->img->dim.y >= dst.y)
+			{
+			variable=1;
+			}
+	}
+
+*/
+
+
+
+	return variable;
+}
 
 
 

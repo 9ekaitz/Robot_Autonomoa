@@ -31,4 +31,7 @@
 
 	void mover_punto(NODO_IMG *img_header, PIXELKOORD src, PIXELKOORD dst);
 
+	int caniar_de_punto(NODO_IMG *img_header, PIXELKOORD src, PIXELKOORD dst);
+
+
 	#endif /* SRC_IMAGE_H_ */
