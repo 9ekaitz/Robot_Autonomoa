@@ -160,9 +160,13 @@ void mover_punto(NODO_IMG *img_header, PIXELKOORD src, PIXELKOORD dst)
 	if(dst.x>src.x&&src.y>dst.y)
 	{
 		vel=vel*-1;
+
 	}
 
 
+	if(m>0&&dst.x<src.x&&dst.y<src.y){
+	vel=vel*-1;
+	}
 
 	x += vel;
 
