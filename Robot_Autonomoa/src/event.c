@@ -123,63 +123,72 @@ void checkMouse(SDL_MouseButtonEvent event, STATUS *app, ROUTE *route, MAP *map)
 	}
 }
 
-void moveCar(PIXELKOORD src, PIXELKOORD dst, OBJECT *car)
+void moveCar( OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
 {
-	int speed;
+	int speed = SPEED;
 
+	int debug_x, debug_y;
 	int *x = &car->dim.x;
 	int *y = &car->dim.y;
 
+	debug_x = car->dim.x;
+	debug_y = car->dim.y;
 
-	float m = (float)(dst.y-src.y)/(float)(dst.x-src.x);	//Malda
+
+	float m = (float)(dst.y-*y)/(float)(dst.x-*x);	//Malda
 
 	if (src.x > dst.x)	// edozein norazkoan funztionatzeko
 	{
-		speed = -SPEED;
+		speed = -speed;
 	}
 
 	*x = *x + speed;
 	*y = *y +speed*m;
 
-
 	SDL_Delay(100);
-
 }
 
 
 
 
-int caniar_de_punto(OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
+int checkNode(OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
 {
-		int variable = 0;
 
-		int vel=10;
+	int x = car->dim.x;	//Puntuarena
 
-		int x= car->dim.x;//de la foto
-		int y= car->dim.y;//de la foto
-
-
-		float m=(float)(dst.y-src.y)/(float)(dst.x-src.x);//calculamos la malda
+	/*
+	 * Xabi (Valencia) perdon por este pecado que voy a cometer con los return, pero queda mas limpito
+	 */
 
 
-		if(m<0)
+	if (src.x > dst.x)
+	{
+		if (x <= dst.x)
 		{
-			vel=vel*-1;
+			return 1;
 		}
-		if(vel<=0)
+	}
+	else
+	{
+		if (x >= dst.x)
 		{
-			if( car->dim.x <= dst.x && car->dim.y <= dst.y)
-			{
-				variable=1;
-			}
+			return 1;
 		}
-		else
-		{
-			if(car->dim.x >= dst.x && car->dim.y >= dst.y)
-			{
-				variable=1;
-			}
-		}
+	}
 
-	return variable;
+	return 0;
+}
+
+void followTheLine(OBJECT *car, PATH fastestPath)
+{
+	static int x=0;
+
+	//si la X,Y de la imagen pasa la X,Y del siguiente nodo entra.
+	//kk +=caniar_de_punto(img_header, fastestPath.vertex_koord[kk], fastestPath.vertex_koord[kk+1]);
+
+	if(checkNode(car, fastestPath.vertex_koord[x], fastestPath.vertex_koord[x+1]))
+	{
+		x +=1;
+	}
+	moveCar(car, fastestPath.vertex_koord[x], fastestPath.vertex_koord[x+1]);
 }
