@@ -113,7 +113,15 @@ void drawLines(NODO_IMG *img_header, SDL_Renderer *render, PATH fastestPath)
 //		kk++;
 //	}
 
-	kk +=caniar_de_punto(img_header, fastestPath.vertex_koord[kk], fastestPath.vertex_koord[kk+1]);
+	//kk +=caniar_de_punto(img_header, fastestPath.vertex_koord[kk], fastestPath.vertex_koord[kk+1]);
+
+	if(caniar_de_punto(img_header, fastestPath.vertex_koord[kk], fastestPath.vertex_koord[kk+1]))
+		{
+		kk +=1;
+
+		img_header->ptrNext->ptrNext->img->dim.x=fastestPath.vertex_koord[kk].x;
+		img_header->ptrNext->ptrNext->img->dim.y=fastestPath.vertex_koord[kk].y;
+		}
 
 
 	mover_punto(img_header, fastestPath.vertex_koord[kk], fastestPath.vertex_koord[kk+1]);
@@ -156,7 +164,7 @@ void mover_punto(NODO_IMG *img_header, PIXELKOORD src, PIXELKOORD dst)
 	int x=img_header->ptrNext->ptrNext->img->dim.x;
 	int y=img_header->ptrNext->ptrNext->img->dim.y;
 
-		//	src.x -= img_header->img->scroll.x;
+			//	src.x -= img_header->img->scroll.x;
 			//src.y -= img_header->img->scroll.y;
 
 	float m=(float)(dst.y-src.y)/(float)(dst.x-src.x);//calculamos la malda
@@ -217,36 +225,64 @@ int caniar_de_punto(NODO_IMG *img_header, PIXELKOORD src, PIXELKOORD dst)
 		vel=vel*-1;
 		}
 
-		if(dst.x>src.x&&src.y>dst.y)
+//		if(dst.x>src.x&&src.y>dst.y)
+//		{
+//			vel=vel*-1;
+//
+//		}
+		/*
+		//este se usa
+		if (m>0&&vel>0)
 		{
-			vel=vel*-1;
+
+				if(m>0&&dst.x<src.x&&dst.y<src.y)
+				{
+				vel=vel*-1;
+				}
 
 		}
 
+		//estese usa
+			if (m>0&&vel<0) {
 
-		if(m>0&&dst.x<src.x&&dst.y<src.y)
+				if (x <=dst.x && y <= dst.y  )
+				{
+					variable=1;
+				}
+			}
+
+			if(m<=0 && vel<=0)
+			{
+				if (x<=dst.x && y>=dst.y)
+				{
+					variable=1;
+
+				}
+			}
+
+
+
+
+
+
+
+
+
+if (m<0 && vel>0) {
+
+	if (x <=dst.x && y >= dst.y  )
 		{
-		vel=vel*-1;
+			variable=1;
 		}
-
-if (m>0&&vel<0) {
-
-	if (y <= dst.y && x <=dst.x)
-	{
-		variable=1;
-	}
-
 
 }
 
+*/
 
+//mira aqui tonto
 
-
-
-
-
-/*mira aqui tonto
-	if(vel<0){
+		if(vel<=0)
+	{
 
 		if(img_header->ptrNext->ptrNext->img->dim.x <= dst.x && img_header->ptrNext->ptrNext->img->dim.y <= dst.y)
 			{
@@ -260,7 +296,7 @@ if (m>0&&vel<0) {
 			}
 	}
 
-*/
+
 
 
 
