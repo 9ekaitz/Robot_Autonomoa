@@ -123,7 +123,7 @@ void checkMouse(SDL_MouseButtonEvent event, STATUS *app, ROUTE *route, MAP *map)
 	}
 }
 
-void moveCar( OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
+void moveCar( OBJECT *car, PIXELKOORD src, PIXELKOORD dst, BACKGROUND *background)
 {
 	int speed = SPEED;
 
@@ -144,6 +144,16 @@ void moveCar( OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
 
 	*x = *x + speed;
 	*y = *y +speed*m;
+
+	int xx=*x;
+	int yy=*y;
+
+	background->scroll.x=xx-PANTAILA_ZABALERA/2;
+
+
+
+		background->scroll.y=yy-PANTAILA_ALTUERA/2 ;
+
 
 	SDL_Delay(100);
 }
@@ -179,7 +189,7 @@ int checkNode(OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
 	return 0;
 }
 
-void followTheLine(OBJECT *car, PATH fastestPath)
+void followTheLine(OBJECT *car, PATH fastestPath, BACKGROUND *background)
 {
 	static int x=0;
 
@@ -190,5 +200,5 @@ void followTheLine(OBJECT *car, PATH fastestPath)
 	{
 		x +=1;
 	}
-	moveCar(car, fastestPath.vertex_koord[x], fastestPath.vertex_koord[x+1]);
+	moveCar(car, fastestPath.vertex_koord[x], fastestPath.vertex_koord[x+1],background);
 }
