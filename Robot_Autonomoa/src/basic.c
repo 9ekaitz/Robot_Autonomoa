@@ -75,10 +75,12 @@ void renderObjects(SDL_Renderer **render, BACKGROUND *background, NODO_OBJ *head
 {
 	NODO_OBJ *aux;
 	SDL_Rect aux2;
+	int i = 0;
 
 	aux = header;
 
-	if (current == ONROUTE) drawLines(background, *render, fastestPath);
+	if (current == ONROUTE)
+	drawLines(background, *render, fastestPath);
 
 	while (aux != NULL)
 	{
@@ -98,10 +100,16 @@ void renderObjects(SDL_Renderer **render, BACKGROUND *background, NODO_OBJ *head
 		//Argazkiaren 0,0 puntua "aldatu"
 		aux2.x -= aux2.w/2;
 		aux2.y -= aux2.h;
+		if (i == 2)
+		{
+			moveCar(fastestPath, aux->obj);
+		}
 		//Render
 		SDL_RenderCopy(*render, aux->obj->texture, NULL, &aux2);
 		aux = aux->ptrNext;
+		i++;
 	}
+
 }
 
 void launch(SDL_Renderer **render, pBACKGROUND *background, MAP **map)

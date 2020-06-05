@@ -6,7 +6,7 @@
 void checkEvents(SDL_Renderer *render, BACKGROUND *background, STATUS *app, pNODO_OBJ *header, ROUTE *route, MAP *map, PATH *fastestPath, TTF_Font *font, SDL_Color color)
 {
 	SDL_Event event;
-	PIXELKOORD point;
+	PIXELKOORD endPoint, startPoint;
 
 	while (SDL_PollEvent(&event))
 	{
@@ -19,13 +19,15 @@ void checkEvents(SDL_Renderer *render, BACKGROUND *background, STATUS *app, pNOD
 				checkMouse(event.button, app, route, map);
 				if (route->kop == 1)
 				{
-					point = coordToPixel(map->koord[route->points[0]]);
-					load_image(header, render, "./media/pointer.bmp", point.x, point.y, 30, 40);
+					startPoint = coordToPixel(map->koord[route->points[0]]);
+					load_image(header, render, "./media/pointer.bmp", startPoint.x, startPoint.y, 30, 40);
 				}
 				if (route->kop == 2)
 				{
-					point = coordToPixel(map->koord[route->points[1]]);
-					load_image(header, render, "./media/meta.bmp", point.x, point.y, 37, 40);
+					startPoint = coordToPixel(map->koord[route->points[0]]);
+					endPoint = coordToPixel(map->koord[route->points[1]]);
+					load_image(header, render, "./media/meta.bmp", endPoint.x, endPoint.y, 37, 40);
+					load_image(header, render, "./media/punto.bmp", startPoint.x, startPoint.y, 40, 30);
 					route->kop = 0;
 				}
 				if (app->current == LA_RUTA_SE_ESTA_CALCULANDO)
@@ -119,4 +121,65 @@ void checkMouse(SDL_MouseButtonEvent event, STATUS *app, ROUTE *route, MAP *map)
 
 			break;
 	}
+}
+
+void moveCar(PIXELKOORD src, PIXELKOORD dst, OBJECT *car)
+{
+	int speed;
+
+	int *x = &car->dim.x;
+	int *y = &car->dim.y;
+
+
+	float m = (float)(dst.y-src.y)/(float)(dst.x-src.x);	//Malda
+
+	if (src.x > dst.x)	// edozein norazkoan funztionatzeko
+	{
+		speed = -SPEED;
+	}
+
+	*x = *x + speed;
+	*y = *y +speed*m;
+
+
+	SDL_Delay(100);
+
+}
+
+
+
+
+int caniar_de_punto(OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
+{
+		int variable = 0;
+
+		int vel=10;
+
+		int x= car->dim.x;//de la foto
+		int y= car->dim.y;//de la foto
+
+
+		float m=(float)(dst.y-src.y)/(float)(dst.x-src.x);//calculamos la malda
+
+
+		if(m<0)
+		{
+			vel=vel*-1;
+		}
+		if(vel<=0)
+		{
+			if( car->dim.x <= dst.x && car->dim.y <= dst.y)
+			{
+				variable=1;
+			}
+		}
+		else
+		{
+			if(car->dim.x >= dst.x && car->dim.y >= dst.y)
+			{
+				variable=1;
+			}
+		}
+
+	return variable;
 }
