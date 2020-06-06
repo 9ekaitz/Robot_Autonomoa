@@ -109,7 +109,7 @@ void checkMouse(SDL_MouseButtonEvent event, STATUS *app, ROUTE *route, MAP *map)
 	}
 }
 
-void moveCar(OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
+void moveCar(OBJECT *car, PIXELKOORD src, PIXELKOORD dst,BACKGROUND *background)
 {
 	int *x = &car->dim.x;
 	int *y = &car->dim.y;
@@ -119,6 +119,29 @@ void moveCar(OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
 
 	*x = *x + SPEED*cosf(angle);
 	*y = *y + SPEED*sinf(angle);
+
+
+
+	int xx=*x;
+	int yy=*y;
+		/////en estas condiciones combrobamos si el scroll se pasa de la imagen de atras //////
+
+		//este es para comprobar en X
+	if (xx-PANTAILA_ZABALERA/2>0 && xx-PANTAILA_ZABALERA/2 + PANTAILA_ZABALERA< IMG_WIDTH) {
+
+
+		background->scroll.x=xx-PANTAILA_ZABALERA/2;
+
+	}
+
+	//este es para comprobar en y
+	if (yy-PANTAILA_ALTUERA/2>0 && yy-PANTAILA_ALTUERA/2 + PANTAILA_ALTUERA< IMG_HEIGHT) {
+
+
+		background->scroll.y=yy-PANTAILA_ALTUERA/2 ;
+
+	}
+
 }
 
 int checkNode(OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
@@ -148,7 +171,7 @@ int checkNode(OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
 	return 0;
 }
 
-void followTheLine(OBJECT *car, PATH fastestPath, PROCCESS *current)
+void followTheLine(OBJECT *car, PATH fastestPath, PROCCESS *current, BACKGROUND *background)
 {
 	static int x = 0;
 	int skip;
@@ -165,7 +188,7 @@ void followTheLine(OBJECT *car, PATH fastestPath, PROCCESS *current)
 		}
 	} while (skip);
 
-	moveCar(car, fastestPath.vertex_koord[x], fastestPath.vertex_koord[x + 1]);
+	moveCar(car, fastestPath.vertex_koord[x], fastestPath.vertex_koord[x + 1],background);
 	if (x >= fastestPath.len - 1)
 	{
 		x = 0;
@@ -226,6 +249,13 @@ void refreshStatus(BACKGROUND *background, PROCCESS *current,
 			load_font(toRender, render, fastestPath->cost, font, color);
 			//aparecerKotxe();
 			*current = ONROUTE;
+
+
+			//esto pone el scroll centrado con el punto
+			rectBuilder(&background->scroll, startPoint.x-PANTAILA_ZABALERA/2,startPoint.y-PANTAILA_ALTUERA/2, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
+
+
+
 		}
 		break;
 	case ONROUTE:
