@@ -28,6 +28,10 @@ void checkEvents(SDL_Renderer *render, BACKGROUND *background, STATUS *app, pNOD
 					endPoint = coordToPixel(map->koord[route->points[1]]);
 					load_image(header, render, "./media/meta.bmp", endPoint.x, endPoint.y, 37, 40);
 					load_image(header, render, "./media/punto.bmp", startPoint.x, startPoint.y, 40, 30);
+
+					//esto pone el scroll centrado con el punto
+					rectBuilder(&background->scroll, startPoint.x-PANTAILA_ZABALERA/2,startPoint.y-PANTAILA_ALTUERA/2, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
+
 					route->kop = 0;
 				}
 				if (app->current == LA_RUTA_SE_ESTA_CALCULANDO)
@@ -59,6 +63,7 @@ void checkEvents(SDL_Renderer *render, BACKGROUND *background, STATUS *app, pNOD
 					if (background->scroll.x + PANTAILA_ZABALERA <= background->dim.w-15)
 					{
 						background->scroll.x += 15;
+
 					}
 					break;
 				case SDL_SCANCODE_LEFT:
@@ -75,7 +80,7 @@ void checkEvents(SDL_Renderer *render, BACKGROUND *background, STATUS *app, pNOD
 				switch (event.key.keysym.scancode)
 				{
 					case SDL_SCANCODE_RETURN:
-						rectBuilder(&background->scroll, 0,0, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
+						//rectBuilder(&background->scroll, 0,0, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
 						break;
 					case SDL_SCANCODE_ESCAPE:
 						app->run = SDL_FALSE;
@@ -148,14 +153,29 @@ void moveCar( OBJECT *car, PIXELKOORD src, PIXELKOORD dst, BACKGROUND *backgroun
 	int xx=*x;
 	int yy=*y;
 
+
+	/////en estas condiciones combrobamos si el scroll se pasa de la imagen de atras //////
+
+	//este es para comprobar en X
+if (xx-PANTAILA_ZABALERA/2>0 && xx-PANTAILA_ZABALERA/2 + PANTAILA_ZABALERA< IMG_WIDTH) {
+
+
 	background->scroll.x=xx-PANTAILA_ZABALERA/2;
 
+}
+
+//este es para comprobar en y
+if (yy-PANTAILA_ALTUERA/2>0 && yy-PANTAILA_ALTUERA/2 + PANTAILA_ALTUERA< IMG_HEIGHT) {
 
 
-		background->scroll.y=yy-PANTAILA_ALTUERA/2 ;
+	background->scroll.y=yy-PANTAILA_ALTUERA/2 ;
+
+}
 
 
-	SDL_Delay(100);
+
+
+	SDL_Delay(50);
 }
 
 
