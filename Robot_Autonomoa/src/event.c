@@ -124,23 +124,25 @@ void moveCar(OBJECT *car, PIXELKOORD src, PIXELKOORD dst,BACKGROUND *background)
 
 	int xx=*x;
 	int yy=*y;
-		/////en estas condiciones combrobamos si el scroll se pasa de la imagen de atras //////
-
-		//este es para comprobar en X
-	if (xx-PANTAILA_ZABALERA/2>0 && xx-PANTAILA_ZABALERA/2 + PANTAILA_ZABALERA< IMG_WIDTH) {
 
 
-		background->scroll.x=xx-PANTAILA_ZABALERA/2;
+	/////en estas condiciones comprobamos si el scroll se pasa de la imagen de atras //////
 
-	}
-
-	//este es para comprobar en y
-	if (yy-PANTAILA_ALTUERA/2>0 && yy-PANTAILA_ALTUERA/2 + PANTAILA_ALTUERA< IMG_HEIGHT) {
+			//este es para comprobar en X
+		if (xx-PANTAILA_ZABALERA/2>=0 && xx-PANTAILA_ZABALERA/2 + PANTAILA_ZABALERA<= IMG_WIDTH) {
 
 
-		background->scroll.y=yy-PANTAILA_ALTUERA/2 ;
+			background->scroll.x=xx-PANTAILA_ZABALERA/2;
 
-	}
+		}
+
+		//este es para comprobar en y
+		if (yy-PANTAILA_ALTUERA/2>=0 && yy-PANTAILA_ALTUERA/2 + PANTAILA_ALTUERA<= IMG_HEIGHT) {
+
+
+			background->scroll.y=yy-PANTAILA_ALTUERA/2 ;
+
+		}
 
 }
 
@@ -252,7 +254,7 @@ void refreshStatus(BACKGROUND *background, PROCCESS *current,
 
 
 			//esto pone el scroll centrado con el punto
-			rectBuilder(&background->scroll, startPoint.x-PANTAILA_ZABALERA/2,startPoint.y-PANTAILA_ALTUERA/2, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
+			rectBuilder(&background->scroll, startPoint.x-PANTAILA_ZABALERA/5,startPoint.y-PANTAILA_ALTUERA/5, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
 
 
 
