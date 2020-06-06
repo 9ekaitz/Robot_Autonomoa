@@ -125,7 +125,6 @@ int checkNode(OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
 {
 
 	int x = car->dim.x;	//Puntuarena
-	int y = car->dim.y;	//Puntuarena
 
 	/*
 	 * Xabi (Valencia) perdon por este pecado que voy a cometer con los return, pero queda mas limpito
@@ -229,7 +228,6 @@ void refreshStatus(BACKGROUND *background, PROCCESS *current,
 		}
 		break;
 	case ONROUTE:
-
 		break;
 	case FINISHED:
 		restart(background, toRender);

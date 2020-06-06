@@ -115,6 +115,11 @@ void renderObjects(SDL_Renderer **render, BACKGROUND *background, NODO_OBJ *toRe
 void launch(SDL_Renderer **render, pBACKGROUND *background, pNODO_OBJ *header, MAP **map)
 {
 	load_background(background, *render, "./media/gros5.bmp", 5002, 1926);	//mapa kargatu, src, w, h
+	renderBackground(render, *background);	//pantaila renderizatu
+	refresh(*render);
+	SDL_Delay(2000);	//Denbora hau mapak kargatzeko izango zen, baina fitxategi txikiak direnez delay jartzen diogu
+	destroyBackground(background);
+	load_background(background, *render, "./media/gros5.bmp", 5002, 1926);	//mapa kargatu, src, w, h
 	load_map(map, "gros.dat", "gros_koord.dat");	//maparen datuak kargatu, distantzia matrizea eta koordenatuak
 
 	load_image(header, *render, "./media/pointer.bmp", 0, 0, 30, 40, START);
