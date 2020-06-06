@@ -71,15 +71,15 @@ void renderBackground(SDL_Renderer **render, BACKGROUND *background)
 
 }
 
-void renderObjects(SDL_Renderer **render, BACKGROUND *background, NODO_OBJ *header, PATH fastestPath, PROCCESS current)
+void renderObjects(SDL_Renderer **render, BACKGROUND *background, NODO_OBJ *toRender, PATH fastestPath, PROCCESS *current)
 {
 	NODO_OBJ *aux;
 	SDL_Rect aux2;
 	int i = 0;
 
-	aux = header;
+	aux = toRender;
 
-	if (current == ONROUTE)
+	if (*current == ONROUTE)
 	drawLines(background, *render, fastestPath);
 
 	while (aux != NULL)
@@ -100,9 +100,9 @@ void renderObjects(SDL_Renderer **render, BACKGROUND *background, NODO_OBJ *head
 		//Argazkiaren 0,0 puntua "aldatu"
 		aux2.x -= aux2.w/2;
 		aux2.y -= aux2.h;
-		if (i == 2)
+		if (i == 2 && *current == ONROUTE)
 		{
-			followTheLine(fastestPath, aux->obj);
+			followTheLine(fastestPath, aux->obj, current);
 		}
 		//Render
 		SDL_RenderCopy(*render, aux->obj->texture, NULL, &aux2);
@@ -112,10 +112,14 @@ void renderObjects(SDL_Renderer **render, BACKGROUND *background, NODO_OBJ *head
 
 }
 
-void launch(SDL_Renderer **render, pBACKGROUND *background, MAP **map)
+void launch(SDL_Renderer **render, pBACKGROUND *background, pNODO_OBJ *header, MAP **map)
 {
 	load_background(background, *render, "./media/gros5.bmp", 5002, 1926);	//mapa kargatu, src, w, h
 	load_map(map, "gros.dat", "gros_koord.dat");	//maparen datuak kargatu, distantzia matrizea eta koordenatuak
+
+	load_image(header, *render, "./media/pointer.bmp", 0, 0, 30, 40, START);
+	load_image(header, *render, "./media/meta.bmp", 0, 0, 37, 40, END);
+	load_image(header, *render, "./media/punto.bmp", 0, 0, 40, 30, CAR);
 
 	renderBackground(render, *background);	//pantaila renderizatu
 	refresh(*render);
@@ -148,7 +152,7 @@ void destroyObjects(pNODO_OBJ *header, int content)
 		{
 			tmp = aux;
 			aux = aux->ptrNext;
-			if (content) free(tmp->obj);
+			if (content || tmp->obj->type == FONT) free(tmp->obj);
 			free(tmp);
 		}
 		*header = NULL;
@@ -162,4 +166,11 @@ void destroyBackground(pBACKGROUND *background)	 //maparen argazkia memoriatik e
 		free(*background);
 		*background = NULL;
 	}
+}
+
+void restart(BACKGROUND *background, pNODO_OBJ *toRender)
+{
+	background->scroll.x = -1;
+	background->scroll.y = -1;
+	destroyObjects(toRender, 0);
 }

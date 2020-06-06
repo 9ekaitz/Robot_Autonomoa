@@ -35,19 +35,19 @@ void load_background(pBACKGROUND *background, SDL_Renderer *render, char src[], 
 	*background = tmp;
 }
 
-void load_image(pNODO_OBJ *header, SDL_Renderer *render, char src[], int x, int y, int w, int h)
+void load_image(pNODO_OBJ *header, SDL_Renderer *render, char src[], int x, int y, int w, int h, TYPE type)
 {
 
 	OBJECT *image;
 
-	load_imageData(&image, render, src, x, y, w, h);
+	load_imageData(&image, render, src, x, y, w, h, type);
 	load_objectInsertBottom(header, image);
 
 	// como ya he hecho la textura el surface no me hace falta y lo borro
 
 }
 
-void load_imageData(OBJECT **object, SDL_Renderer *render, char src[], int x, int y, int w, int h)
+void load_imageData(OBJECT **object, SDL_Renderer *render, char src[], int x, int y, int w, int h, TYPE type)
 {
 	SDL_Surface* surface;
 	SDL_Texture* texture;
@@ -70,6 +70,7 @@ void load_imageData(OBJECT **object, SDL_Renderer *render, char src[], int x, in
 
 	SDL_FreeSurface(surface);
 
+	tmp->type = type;
 	tmp->texture = texture;
 
 	rectBuilder(&tmp->dim, x, y, w, h); //sdl_rect estrukturari balioak emateko
@@ -175,6 +176,7 @@ void load_fontData(OBJECT **object, SDL_Renderer *render, TTF_Font *font, SDL_Co
 
 	SDL_FreeSurface(surface);
 
+	tmp->type = FONT;
 	tmp->texture = texture;
 
 	SDL_QueryTexture(texture, NULL, NULL, &tmp->dim.w, &tmp->dim.h); //sdl_rect estrukturari balioak emateko

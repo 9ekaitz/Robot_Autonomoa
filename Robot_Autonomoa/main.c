@@ -11,35 +11,36 @@
 int main()
 {
 
-	STATUS app= {SDL_TRUE, SELECT};
+	STATUS app= {SDL_TRUE, SELECT_1};
     SDL_Window *window;                    // Declare a pointer
     SDL_Renderer *render;
     TTF_Font *font;
     SDL_Color color = {0,0,0, 255};
     Uint32 refresh_rate = 0, check_rate = 0;
     BACKGROUND *background;
-    NODO_OBJ *header = NULL;
+    NODO_OBJ *header = NULL, *toRender = NULL;
     MAP *map;
     ROUTE route = {{-1,-1},0};
     PATH fastestPath;
 
     windowandRender(&window, &render, &font); //Lehioa, render eta letra mota hasieratu
 
-    launch(&render, &background, &map);	//Programa hasteko osagai basikoak kargatu (mapa eta bere datuak)
+    launch(&render, &background, &header, &map);	//Programa hasteko osagai basikoak kargatu (mapa eta bere datuak)
 
     while (app.run)
     {
     	if (SDL_TICKS_PASSED(SDL_GetTicks(), check_rate))
     	{
-    		checkEvents(render, background, &app, &header, &route, map, &fastestPath, font, color);
+    		checkEvents(render, background, &app, &route, map);
+    		refreshStatus(background, &app.current, render, &toRender, header, &route, map, &fastestPath, font, color);
     		check_rate = SDL_GetTicks() + 10;		//100 checks sgunduro
     	}
     	if (SDL_TICKS_PASSED(SDL_GetTicks(), refresh_rate))
     	{
     		renderBackground(&render, background);
-    	    renderObjects(&render, background, header, fastestPath, app.current);
+    	    renderObjects(&render, background, toRender, fastestPath, &app.current);
     	    refresh(render);
-    	  	refresh_rate = SDL_GetTicks() + 50;		//20 fps
+    	  	refresh_rate = SDL_GetTicks() + 30;		//20 fps
     	}
     }
 

@@ -1,12 +1,13 @@
+#include <stdlib.h>
 #include "status.h"
 #include "map.h"
 #include "graphic.h"
+#include "basic.h"
 #include "event.h"
 
-void checkEvents(SDL_Renderer *render, BACKGROUND *background, STATUS *app, pNODO_OBJ *header, ROUTE *route, MAP *map, PATH *fastestPath, TTF_Font *font, SDL_Color color)
+void checkEvents(SDL_Renderer *render, BACKGROUND *background, STATUS *app, ROUTE *route, MAP *map)
 {
 	SDL_Event event;
-	PIXELKOORD endPoint, startPoint;
 
 	while (SDL_PollEvent(&event))
 	{
@@ -17,27 +18,6 @@ void checkEvents(SDL_Renderer *render, BACKGROUND *background, STATUS *app, pNOD
 				break;
 			case SDL_MOUSEBUTTONUP:
 				checkMouse(event.button, app, route, map);
-				if (route->kop == 1)
-				{
-					startPoint = coordToPixel(map->koord[route->points[0]]);
-					load_image(header, render, "./media/pointer.bmp", startPoint.x, startPoint.y, 30, 40);
-				}
-				if (route->kop == 2)
-				{
-					startPoint = coordToPixel(map->koord[route->points[0]]);
-					endPoint = coordToPixel(map->koord[route->points[1]]);
-					load_image(header, render, "./media/meta.bmp", endPoint.x, endPoint.y, 37, 40);
-					load_image(header, render, "./media/punto.bmp", startPoint.x, startPoint.y, 40, 30);
-					route->kop = 0;
-				}
-				if (app->current == LA_RUTA_SE_ESTA_CALCULANDO)
-				{
-					*fastestPath = A_star(*map, route->points[0], route->points[1]);
-					fillPathKoord(map->koord, fastestPath);
-					load_font(header, render, fastestPath->cost, font, color);
-//					aparecerKotxe();
-					app->current = ONROUTE;
-				}
 				break;
 				//momentuz ez daukagu teklarik
 			case SDL_KEYDOWN:
@@ -102,17 +82,17 @@ void checkMouse(SDL_MouseButtonEvent event, STATUS *app, ROUTE *route, MAP *map)
 	switch (event.button)
 	{
 		case SDL_BUTTON_LEFT:
-			if (app->current == SELECT)
+			if (app->current == SELECT_1)
 			{
-				route->points[route->kop] = nearestPoint(map->koord, map->size, mouse);
-				route->kop++;
-				if (route->kop == 2)
-				{
-					app->current = LA_RUTA_SE_ESTA_CALCULANDO;
-				}
+				route->points[0] = nearestPoint(map->koord, map->size, mouse);
+				route->kop = 1;
+			}
+			if (app->current == SELECT_2)
+			{
+				route->points[1] = nearestPoint(map->koord, map->size, mouse);
+				route->kop = 2;
 			}
 			break;
-
 		case SDL_BUTTON_RIGHT:
 
 			break;
@@ -123,17 +103,12 @@ void checkMouse(SDL_MouseButtonEvent event, STATUS *app, ROUTE *route, MAP *map)
 	}
 }
 
-void moveCar( OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
+void moveCar(OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
 {
 	int speed = SPEED;
 
-	int debug_x, debug_y;
 	int *x = &car->dim.x;
 	int *y = &car->dim.y;
-
-	debug_x = car->dim.x;
-	debug_y = car->dim.y;
-
 
 	float m = (float)(dst.y-*y)/(float)(dst.x-*x);	//Malda
 
@@ -179,16 +154,79 @@ int checkNode(OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
 	return 0;
 }
 
-void followTheLine(OBJECT *car, PATH fastestPath)
+void followTheLine(OBJECT *car, PATH fastestPath, PROCCESS *current)
 {
 	static int x=0;
 
 	//si la X,Y de la imagen pasa la X,Y del siguiente nodo entra.
-	//kk +=caniar_de_punto(img_header, fastestPath.vertex_koord[kk], fastestPath.vertex_koord[kk+1]);
 
 	if(checkNode(car, fastestPath.vertex_koord[x], fastestPath.vertex_koord[x+1]))
 	{
 		x +=1;
+		if (x >= fastestPath.len-1) *current = FINISHED;
 	}
 	moveCar(car, fastestPath.vertex_koord[x], fastestPath.vertex_koord[x+1]);
+}
+
+void refreshStatus(BACKGROUND *background, PROCCESS *current, SDL_Renderer *render, pNODO_OBJ *toRender,  NODO_OBJ *header, ROUTE *route, MAP *map, PATH *fastestPath, TTF_Font *font, SDL_Color color)
+{
+	PIXELKOORD endPoint, startPoint;
+	NODO_OBJ *aux = header;
+
+	switch (*current) {
+		case SELECT_1:
+			if (route->kop == 1)
+			{
+				startPoint = coordToPixel(map->koord[route->points[0]]);
+				while (aux != NULL && aux->obj->type != START)
+				{
+					aux = aux->ptrNext;
+				}
+				load_objectInsertBottom(toRender, aux->obj);
+				aux->obj->dim.x = startPoint.x;
+				aux->obj->dim.y = startPoint.y;
+				//load;
+				*current = SELECT_2;
+			}
+			break;
+		case SELECT_2:
+			if (route->kop == 2)
+			{
+				startPoint = coordToPixel(map->koord[route->points[0]]);
+				endPoint = coordToPixel(map->koord[route->points[1]]);
+				while (aux != NULL && aux->obj->type != END)
+				{
+					aux = aux->ptrNext;
+				}
+				load_objectInsertBottom(toRender, aux->obj);
+				aux->obj->dim.x = endPoint.x;
+				aux->obj->dim.y = endPoint.y;
+				aux = header;
+				while (aux != NULL && aux->obj->type != CAR)
+				{
+					aux = aux->ptrNext;
+				}
+				load_objectInsertBottom(toRender, aux->obj);
+				aux->obj->dim.x = startPoint.x;
+				aux->obj->dim.y = startPoint.y;
+
+				//load
+				route->kop = 0;
+				*fastestPath = A_star(*map, route->points[0], route->points[1]);
+				fillPathKoord(map->koord, fastestPath);
+				load_font(toRender, render, fastestPath->cost, font, color);
+				//aparecerKotxe();
+				*current = ONROUTE;
+			}
+			break;
+		case ONROUTE:
+
+			break;
+		case FINISHED:
+			restart(background, toRender);
+			*current = SELECT_1;
+			break;
+		default:
+			break;
+	}
 }

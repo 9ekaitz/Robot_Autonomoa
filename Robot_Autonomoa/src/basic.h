@@ -5,11 +5,11 @@
 
 	void refresh(SDL_Renderer *render);
 
-	void launch(SDL_Renderer **render, pBACKGROUND *background, MAP **map);
+	void launch(SDL_Renderer **render, pBACKGROUND *background, pNODO_OBJ *header, MAP **map);
 
 	void renderBackground(SDL_Renderer **render, BACKGROUND *background);
 
-	void renderObjects(SDL_Renderer **render, BACKGROUND *background, NODO_OBJ *header, PATH fastestPath, PROCCESS current);
+	void renderObjects(SDL_Renderer **render, BACKGROUND *background, NODO_OBJ *header, PATH fastestPath, PROCCESS *current);
 
 	void txapar(SDL_Window *window, SDL_Renderer *render);
 
@@ -18,5 +18,7 @@
 	void destroyMap(MAP **map);	//Maparen datuak ezabatu
 
 	void destroyObjects(pNODO_OBJ *header, int content);	//Objektu guztiak ezabatu
+
+	void restart(BACKGROUND *background, pNODO_OBJ *toRender);
 
 #endif /* SRC_BASIC_H_ */

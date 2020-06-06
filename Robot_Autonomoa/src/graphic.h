@@ -4,6 +4,8 @@
 	#define PANTAILA_ALTUERA 720
 	#define PANTAILA_ZABALERA 1280
 
+	typedef enum{START, END, CAR, FONT}TYPE;
+
 	typedef struct background{		//Argazkiak eta pantailan irudikatzeko behar dutren datu guztiak
 		SDL_Texture* texture;
 		SDL_Rect dim, scroll;
@@ -13,7 +15,7 @@
 	typedef struct object{		//Argazkiak eta pantailan irudikatzeko behar dutren datu guztiak
 		SDL_Texture* texture;
 		SDL_Rect dim;
-
+		TYPE type;
 	}OBJECT;
 
 	typedef struct Nodo_OBJ{
@@ -23,9 +25,9 @@
 
 	void load_background(pBACKGROUND *background, SDL_Renderer *render, char src[], int w, int h);
 
-	void load_image(pNODO_OBJ *header, SDL_Renderer *render, char src[], int x, int y, int w, int h);
+	void load_image(pNODO_OBJ *header, SDL_Renderer *render, char src[], int x, int y, int w, int h, TYPE type);
 
-	void load_imageData(OBJECT **image, SDL_Renderer *render, char src[], int x, int y, int w, int h);
+	void load_imageData(OBJECT **object, SDL_Renderer *render, char src[], int x, int y, int w, int h, TYPE type);
 
 	void load_objectInsertTop(pNODO_OBJ *header, OBJECT *object);
 
