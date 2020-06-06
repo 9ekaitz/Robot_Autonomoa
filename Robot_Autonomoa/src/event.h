@@ -7,9 +7,9 @@
 
 	void checkMouse(SDL_MouseButtonEvent event, STATUS *app, ROUTE *route, MAP *map);
 
-	void followTheLine(OBJECT *car, PATH fastestPath, PROCCESS *current);
+	void followTheLine(OBJECT *car, PATH fastestPath, PROCCESS *current,BACKGROUND *background);
 
-	void moveCar( OBJECT *car, PIXELKOORD src, PIXELKOORD dst);
+	void moveCar( OBJECT *car, PIXELKOORD src, PIXELKOORD dst, BACKGROUND *background);
 
 	int checkNode(OBJECT *car, PIXELKOORD src, PIXELKOORD dst);
 

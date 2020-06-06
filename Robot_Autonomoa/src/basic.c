@@ -102,7 +102,7 @@ void renderObjects(SDL_Renderer **render, BACKGROUND *background, NODO_OBJ *toRe
 		aux2.y -= aux2.h;
 		if (i == 2 && *current == ONROUTE)
 		{
-			followTheLine(fastestPath, aux->obj, current);
+			followTheLine(fastestPath, aux->obj, current,background);
 		}
 		//Render
 		SDL_RenderCopy(*render, aux->obj->texture, NULL, &aux2);
