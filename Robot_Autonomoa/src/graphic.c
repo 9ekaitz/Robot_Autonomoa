@@ -195,6 +195,6 @@ void load_font(pNODO_OBJ *header, SDL_Renderer *render, float cost, TTF_Font *fo
 	sprintf(text, "%.2f", cost);
 	strcat(text, " m");
 
-	load_fontData(&object, render, font, color, text, 1000, 500);
+	load_fontData(&object, render, font, color, text, 1140, 40);
 	load_objectInsertBottom(header, object);
 }

@@ -4,51 +4,53 @@
 #include "status.h"
 #include "basic.h"
 
-
-
 int windowandRender(SDL_Window **window, SDL_Renderer **render, TTF_Font **font)
 {
 	// SDL hasi
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Ezin izan da SDL hasieratu: %s", SDL_GetError());
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	{
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+				"Ezin izan da SDL hasieratu: %s", SDL_GetError());
 		return -1;
 	}
 
-	if(TTF_Init()==-1) {
-	    printf("TTF_Init: %s\n", TTF_GetError());
-	    return -1;
+	if (TTF_Init() == -1)
+	{
+		printf("TTF_Init: %s\n", TTF_GetError());
+		return -1;
 	}
-	*font = TTF_OpenFont("./media/digital.TTF", 100);
+	*font = TTF_OpenFont("./media/digital.TTF", 40);
 	// Lehioa sortu eta ezaugarriak zehaztu
 
-	*window = SDL_CreateWindow(
-		"OSM",                  			// Izenburua
-		SDL_WINDOWPOS_CENTERED,           // Leihoa erdian jarri
-		SDL_WINDOWPOS_CENTERED,           // Leihoa erdian jarri
-		PANTAILA_ZABALERA,                // Sortzeko lehioaren zabalera
-		PANTAILA_ALTUERA,                 // Sortzeko leihoaren altuera
-		SDL_WINDOW_OPENGL                // Erabilitako teknologia grafikoa
-	);
+	*window = SDL_CreateWindow("OSM",                  			// Izenburua
+			SDL_WINDOWPOS_CENTERED,           // Leihoa erdian jarri
+			SDL_WINDOWPOS_CENTERED,           // Leihoa erdian jarri
+			PANTAILA_ZABALERA,                // Sortzeko lehioaren zabalera
+			PANTAILA_ALTUERA,                 // Sortzeko leihoaren altuera
+			SDL_WINDOW_OPENGL                // Erabilitako teknologia grafikoa
+			);
 
-	if (*window == NULL) { 		// Leihoa sortu dela konprobatzen du
+	if (*window == NULL)
+	{ 		// Leihoa sortu dela konprobatzen du
 
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Ezin izan da leihoa sortu: %s\n", SDL_GetError());		//Errorea
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+				"Ezin izan da leihoa sortu: %s\n", SDL_GetError());	//Errorea
 		return -1;
 	}
 
- /*
-    --------------IKONOA LEHIOAN------------------
+	/*
+	 --------------IKONOA LEHIOAN------------------
 
-	SDL_Surface* ikonoa = SDL_LoadBMP(".\\media\\Ikonoa.bmp");
-	SDL_SetWindowIcon(leihoa, ikonoa);
-	SDL_FreeSurface(ikonoa);
-*/
+	 SDL_Surface* ikonoa = SDL_LoadBMP(".\\media\\Ikonoa.bmp");
+	 SDL_SetWindowIcon(leihoa, ikonoa);
+	 SDL_FreeSurface(ikonoa);
+	 */
 
-	*render = SDL_CreateRenderer(*window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);		//Renderizatua hasi
+	*render = SDL_CreateRenderer(*window, -1,
+			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);//Renderizatua hasi
 
 	return 0;
 }
-
 
 void refresh(SDL_Renderer *render)	//dena marrasten du
 {
@@ -62,69 +64,90 @@ void renderBackground(SDL_Renderer **render, BACKGROUND *background)
 	SDL_SetRenderDrawColor(*render, 0, 0, 0, 255);	//Kolorea ezarri
 	SDL_RenderClear(*render);	//Pantaila esandako kolorearekin garbitu
 
-	if (background->dim.x != -1) dst = &background->dim;
-	else dst = NULL;
-	if (background->scroll.x != -1) src = &background->scroll;
-	else src = NULL;
+	if (background->dim.x != -1)
+		dst = &background->dim;
+	else
+		dst = NULL;
+	if (background->scroll.x != -1)
+		src = &background->scroll;
+	else
+		src = NULL;
 
 	SDL_RenderCopy(*render, background->texture, src, dst);
 
 }
 
-void renderObjects(SDL_Renderer **render, BACKGROUND *background, NODO_OBJ *toRender, PATH fastestPath, PROCCESS *current)
+void renderObjects(SDL_Renderer **render, BACKGROUND *background,
+		NODO_OBJ *toRender, PATH fastestPath, PROCCESS *current)
 {
 	NODO_OBJ *aux;
 	SDL_Rect aux2;
-	int i = 0;
 
 	aux = toRender;
 
 	if (*current == ONROUTE)
-	drawLines(background, *render, fastestPath);
+		drawLines(background, *render, fastestPath);
 
 	while (aux != NULL)
 	{
 		//Scroll-a dela eta argazkiak eskalatzeko eta leku egokian kokatzeko
-		aux2.w = aux->obj->dim.w;
-		aux2.h = aux->obj->dim.h;
-		if (background->scroll.x < 0)
+		rectBuilder(&aux2, aux->obj->dim.x, aux->obj->dim.y, aux->obj->dim.w, aux->obj->dim.h);
+
+		if (aux->obj->type != FONT)
 		{
-			aux2.x = ((float)aux->obj->dim.x / (float)IMG_WIDTH) * PANTAILA_ZABALERA;
-			aux2.y = ((float)aux->obj->dim.y / (float)IMG_HEIGHT) * PANTAILA_ALTUERA;
-		}
-		else
-		{
-			aux2.x = aux->obj->dim.x - background->scroll.x;
-			aux2.y = aux->obj->dim.y - background->scroll.y;
+			if (background->scroll.x < 0)
+			{
+				aux2.x = ((float) aux->obj->dim.x / (float) IMG_WIDTH)
+						* PANTAILA_ZABALERA;
+				aux2.y = ((float) aux->obj->dim.y / (float) IMG_HEIGHT)
+						* PANTAILA_ALTUERA;
+			}
+			else
+			{
+				aux2.x = aux->obj->dim.x - background->scroll.x;
+				aux2.y = aux->obj->dim.y - background->scroll.y;
+			}
 		}
 		//Argazkiaren 0,0 puntua "aldatu"
-		aux2.x -= aux2.w/2;
-		aux2.y -= aux2.h;
-		if (i == 2 && *current == ONROUTE)
+		switch (aux->obj->type)
 		{
-			followTheLine(fastestPath, aux->obj, current,background);
+		case CAR:
+			aux2.x -= aux2.w / 2;
+			aux2.y -= aux2.h / 2;
+			break;
+		case FONT:
+			break;
+		default:
+			aux2.x -= aux2.w / 2;
+			aux2.y -= aux2.h;
+			break;
+		}
+
+		if (aux->obj->type == CAR && *current == ONROUTE)
+		{
+			followTheLine(fastestPath, aux->obj, current, background);
 		}
 		//Render
 		SDL_RenderCopy(*render, aux->obj->texture, NULL, &aux2);
 		aux = aux->ptrNext;
-		i++;
 	}
 
 }
 
-void launch(SDL_Renderer **render, pBACKGROUND *background, pNODO_OBJ *header, MAP **map)
+void launch(SDL_Renderer **render, pBACKGROUND *background, pNODO_OBJ *header,
+		MAP **map)
 {
-	load_background(background, *render, "./media/gros5.bmp", 5002, 1926);	//mapa kargatu, src, w, h
+	load_background(background, *render, "./media/Intro.bmp", 1280, 720);//mapa kargatu, src, w, h
 	renderBackground(render, *background);	//pantaila renderizatu
 	refresh(*render);
-	SDL_Delay(2000);	//Denbora hau mapak kargatzeko izango zen, baina fitxategi txikiak direnez delay jartzen diogu
+	SDL_Delay(2000);//Denbora hau mapak kargatzeko izango zen, baina fitxategi txikiak direnez delay jartzen diogu
 	destroyBackground(background);
-	load_background(background, *render, "./media/gros5.bmp", 5002, 1926);	//mapa kargatu, src, w, h
-	load_map(map, "gros.dat", "gros_koord.dat");	//maparen datuak kargatu, distantzia matrizea eta koordenatuak
+	load_background(background, *render, "./media/gros5.bmp", 5002, 1926);//mapa kargatu, src, w, h
+	load_map(map, "gros.dat", "gros_koord.dat");//maparen datuak kargatu, distantzia matrizea eta koordenatuak
 
 	load_image(header, *render, "./media/pointer.bmp", 0, 0, 30, 40, START);
 	load_image(header, *render, "./media/meta.bmp", 0, 0, 37, 40, END);
-	load_image(header, *render, "./media/punto.bmp", 0, 0, 40, 30, CAR);
+	load_image(header, *render, "./media/punto.bmp", 0, 0, 50, 50, CAR);
 
 	renderBackground(render, *background);	//pantaila renderizatu
 	refresh(*render);
@@ -133,7 +156,7 @@ void launch(SDL_Renderer **render, pBACKGROUND *background, pNODO_OBJ *header, M
 void txapar(SDL_Window *window, SDL_Renderer *render)
 {
 	SDL_DestroyWindow(window);
-    SDL_DestroyRenderer(render);
+	SDL_DestroyRenderer(render);
 }
 
 void destroyMap(MAP **map)
@@ -157,14 +180,15 @@ void destroyObjects(pNODO_OBJ *header, int content)
 		{
 			tmp = aux;
 			aux = aux->ptrNext;
-			if (content || tmp->obj->type == FONT) free(tmp->obj);
+			if (content || tmp->obj->type == FONT)
+				free(tmp->obj);
 			free(tmp);
 		}
 		*header = NULL;
 	}
 }
 
-void destroyBackground(pBACKGROUND *background)	 //maparen argazkia memoriatik ezabatu
+void destroyBackground(pBACKGROUND *background)	//maparen argazkia memoriatik ezabatu
 {
 	if (*background != NULL)
 	{

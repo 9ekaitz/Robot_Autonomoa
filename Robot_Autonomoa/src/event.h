@@ -1,7 +1,7 @@
 #ifndef SRC_EVENT_H_
 #define SRC_EVENT_H_
 
-	#define SPEED 7
+	#define SPEED 4
 
 	void checkEvents(SDL_Renderer *render, BACKGROUND *background, STATUS *app, ROUTE *route, MAP *map);
 
