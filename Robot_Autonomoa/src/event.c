@@ -23,46 +23,10 @@ void checkEvents(SDL_Renderer *render, BACKGROUND *background, STATUS *app,
 			break;
 			//momentuz ez daukagu teklarik
 		case SDL_KEYDOWN:
-			switch (event.key.keysym.scancode)
-			// SWITCH PARA LAS PULSACIONES DE TECLAS
-			{
-			case SDL_SCANCODE_UP:
-				if (background->scroll.y >= 15)
-				{
-					background->scroll.y -= 15;
-				}
-				break;
-			case SDL_SCANCODE_DOWN:
-				if (background->scroll.y + PANTAILA_ALTUERA
-						<= background->dim.h - 15)
-				{
-					background->scroll.y += 15;
-				}
-				break;
-			case SDL_SCANCODE_RIGHT:
-				if (background->scroll.x + PANTAILA_ZABALERA
-						<= background->dim.w - 15)
-				{
-					background->scroll.x += 15;
-				}
-				break;
-			case SDL_SCANCODE_LEFT:
-				if (background->scroll.x >= 15)
-				{
-					background->scroll.x -= 15;
-				}
-				break;
-			default:
-				break;
-			}
 			break;
 		case SDL_KEYUP:
 			switch (event.key.keysym.scancode)
 			{
-			case SDL_SCANCODE_RETURN:
-				rectBuilder(&background->scroll, 3000, 1000, PANTAILA_ZABALERA,
-				PANTAILA_ALTUERA);
-				break;
 			case SDL_SCANCODE_ESCAPE:
 				app->run = SDL_FALSE;
 				break;
@@ -109,7 +73,8 @@ void checkMouse(SDL_MouseButtonEvent event, STATUS *app, ROUTE *route, MAP *map)
 	}
 }
 
-void moveCar(OBJECT *car, PIXELKOORD src, PIXELKOORD dst,BACKGROUND *background)
+void moveCar(OBJECT *car, PIXELKOORD src, PIXELKOORD dst,
+		BACKGROUND *background)
 {
 	int *x = &car->dim.x;
 	int *y = &car->dim.y;
@@ -117,32 +82,17 @@ void moveCar(OBJECT *car, PIXELKOORD src, PIXELKOORD dst,BACKGROUND *background)
 
 	angle = atan2f((dst.y - *y), (dst.x - *x));
 
-	*x = *x + SPEED*cosf(angle);
-	*y = *y + SPEED*sinf(angle);
+	*x = *x + SPEED * cosf(angle);
+	*y = *y + SPEED * sinf(angle);
 
-//
-//
-	int xx=*x;
-	int yy=*y;
-
-
-	/////en estas condiciones comprobamos si el scroll se pasa de la imagen de atras //////
-
-			//este es para comprobar en X
-		if (xx-PANTAILA_ZABALERA/2>=0 && xx-PANTAILA_ZABALERA/2 + PANTAILA_ZABALERA<= IMG_WIDTH) {
-
-
-			background->scroll.x=xx-PANTAILA_ZABALERA/2;
-
-		}
-
-		//este es para comprobar en y
-		if (yy-PANTAILA_ALTUERA/2>=0 && yy-PANTAILA_ALTUERA/2 + PANTAILA_ALTUERA<= IMG_HEIGHT) {
-
-
-			background->scroll.y=yy-PANTAILA_ALTUERA/2 ;
-
-		}
+	if (*x - PANTAILA_ZABALERA / 2 > 0 && *x + PANTAILA_ZABALERA / 2 < IMG_WIDTH)
+	{
+		background->scroll.x = *x - PANTAILA_ZABALERA / 2;
+	}
+	if (*y - PANTAILA_ALTUERA / 2 > 0 && *y + PANTAILA_ALTUERA / 2 < IMG_HEIGHT)
+	{
+		background->scroll.y = *y - PANTAILA_ALTUERA / 2;
+	}
 
 }
 
@@ -172,12 +122,11 @@ int checkNode(OBJECT *car, PIXELKOORD src, PIXELKOORD dst)
 	return 0;
 }
 
-void followTheLine(OBJECT *car, PATH fastestPath, PROCCESS *current, BACKGROUND *background)
+void followTheLine(OBJECT *car, PATH fastestPath, PROCCESS *current,
+		BACKGROUND *background)
 {
 	static int x = 0;
 	int skip;
-
-	//si la X,Y de la imagen pasa la X,Y del siguiente nodo entra.
 
 	do
 	{
@@ -189,7 +138,8 @@ void followTheLine(OBJECT *car, PATH fastestPath, PROCCESS *current, BACKGROUND 
 		}
 	} while (skip);
 
-	moveCar(car, fastestPath.vertex_koord[x], fastestPath.vertex_koord[x + 1],background);
+	moveCar(car, fastestPath.vertex_koord[x], fastestPath.vertex_koord[x + 1],
+			background);
 	if (x >= fastestPath.len - 1)
 	{
 		x = 0;
@@ -204,6 +154,8 @@ void refreshStatus(BACKGROUND *background, PROCCESS *current,
 {
 	PIXELKOORD endPoint, startPoint;
 	NODO_OBJ *aux = header;
+
+	PIXELKOORD scrollAux;
 
 	switch (*current)
 	{
@@ -248,21 +200,42 @@ void refreshStatus(BACKGROUND *background, PROCCESS *current,
 			*fastestPath = A_star(*map, route->points[0], route->points[1]);
 			fillPathKoord(map->koord, fastestPath);
 			load_font(toRender, render, fastestPath->cost, font, color);
-			//aparecerKotxe();
 			*current = ONROUTE;
 
-//
-			//esto pone el scroll centrado con el punto
-			rectBuilder(&background->scroll, startPoint.x-PANTAILA_ZABALERA/2,startPoint.y-PANTAILA_ALTUERA/2, PANTAILA_ZABALERA, PANTAILA_ALTUERA);
-//
-
-
+			if (startPoint.x - PANTAILA_ZABALERA / 2 < 0)
+			{
+				scrollAux.x = 0;
+			}
+			else if (startPoint.x + PANTAILA_ZABALERA / 2 > IMG_WIDTH)
+			{
+				scrollAux.x = IMG_WIDTH - PANTAILA_ZABALERA;
+			}
+			else
+			{
+				scrollAux.x = startPoint.x - PANTAILA_ZABALERA / 2;
+			}
+			if (startPoint.y - PANTAILA_ALTUERA / 2 < 0)
+			{
+				scrollAux.y = 0;
+			}
+			else if (startPoint.y + PANTAILA_ALTUERA / 2 > IMG_HEIGHT)
+			{
+				scrollAux.y = IMG_HEIGHT - PANTAILA_ALTUERA;
+			}
+			else
+			{
+				scrollAux.y = startPoint.y - PANTAILA_ALTUERA / 2;
+			}
+			rectBuilder(&background->scroll, scrollAux.x, scrollAux.y,
+					PANTAILA_ZABALERA,
+					PANTAILA_ALTUERA);
 		}
 		break;
 	case ONROUTE:
 		break;
 	case FINISHED:
 		restart(background, toRender);
+		system("firefox https://www.openstreetmap.org/#map=17/43.32404/-1.97324");
 		*current = SELECT_1;
 		break;
 	default:

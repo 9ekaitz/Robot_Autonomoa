@@ -22,7 +22,7 @@ int windowandRender(SDL_Window **window, SDL_Renderer **render, TTF_Font **font)
 	*font = TTF_OpenFont("./media/digital.TTF", 40);
 	// Lehioa sortu eta ezaugarriak zehaztu
 
-	*window = SDL_CreateWindow("OSM",                  			// Izenburua
+	*window = SDL_CreateWindow("Ohm Cars",    // Izenburua
 			SDL_WINDOWPOS_CENTERED,           // Leihoa erdian jarri
 			SDL_WINDOWPOS_CENTERED,           // Leihoa erdian jarri
 			PANTAILA_ZABALERA,                // Sortzeko lehioaren zabalera
