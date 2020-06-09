@@ -11,28 +11,19 @@ int main()
 
 	while (aukera != 0)
 	{
-		printf("----------------------\n0. Irten\n1. Matrizea sortu\n2. Matrizea konprobatu\n3. Matrizea sinplifikatu\n4. Matriza berria\n5. Matrizea bin\n6. Koordenadak atera\n----------------------\n");
+		printf("----------------------\n0. Irten\n1. Matrizea sinplifikatu\n2. Matrizea bin\n3. Koordenadak atera\n----------------------\n");
 		fgets(str, 128, stdin);
 		sscanf(str, "%d", &aukera);
 
 		switch(aukera)
 		{
 		case 1:
-			matrizeaSortuExec();
-			break;
-		case 2:
-			matrizeaKonprobatuExec();
-			break;
-		case 3:
 			matrizeaSinplifikatu();
 			break;
-		case 4:
-			matrizeaSortu_v2();
-			break;
-		case 5:
+		case 2:
 			matrizeaSortu_v2_Binario();
 			break;
-		case 6:
+		case 3:
 			koordAtera();
 		}
 	}
