@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 
 	                printf("\nDistantzia: %f", GeoDistantzia(x1, x2, y1, y2));*/
 
-	                while (SDL_PollEvent(&event)) {
+	                if(SDL_PollEvent(&event)) {
 	                    if (event.type == SDL_QUIT) {
 	                        done = SDL_TRUE;
 	                    }
