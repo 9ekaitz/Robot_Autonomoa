@@ -165,6 +165,7 @@ void destroyMap(MAP **map)
 {
 	if (*map != NULL)
 	{
+		free((*map)->koord);
 		free(*map);
 		*map = NULL;
 	}

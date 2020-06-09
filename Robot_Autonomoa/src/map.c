@@ -7,40 +7,45 @@
 void load_map(MAP **map, char mapDat[], char koordDat[])
 {
 	double read;
-	MAP *tmp = (MAP *)malloc(sizeof(MAP));
+	MAP *tmp = (MAP*) malloc(sizeof(MAP));
+	KOORD *coords;
 	FILE *mapFile, *koordFile;
 
-	mapFile= fopen(mapDat, "r");
+	mapFile = fopen(mapDat, "r");
+	coords = (KOORD*) malloc(sizeof(KOORD) * tmp->size);
 
 	if (mapFile > 0)
 	{
 		fread(&tmp->size, sizeof(int), 1, mapFile);
+		coords = (KOORD*) malloc(sizeof(KOORD) * tmp->size);
+		tmp->koord = coords;
 
 		for (int i = 0; i < tmp->size; i++)
 		{
 			for (int j = 0; j < tmp->size; j++)
 			{
 				fread(&read, sizeof(double), 1, mapFile);
-				if (read == -1) tmp->mapMatrix[i][j] = INT_MAX;
-				else tmp->mapMatrix[i][j] = read;
+				if (read == -1)
+					tmp->mapMatrix[i][j] = INT_MAX;
+				else
+					tmp->mapMatrix[i][j] = read;
 			}
 		}
-
-		*map = tmp;
 		fclose(mapFile);
-	}
-
-	koordFile = fopen(koordDat, "r");
-	if (koordFile > 0)
-	{
-		for (int i = 0; i < tmp->size; i++)
+		*map = tmp;
+		koordFile = fopen(koordDat, "rb");
+		if (koordFile > 0)
 		{
-			fread(&read, sizeof(double), 1, koordFile);
-			tmp->koord[i].x = read;
-			fread(&read, sizeof(double), 1, koordFile);
-			tmp->koord[i].y = read;
+			for (int i = 0; i < tmp->size; i++)
+			{
+				fread(&tmp->koord[i].x, sizeof(double), 1, koordFile);
+				fread(&tmp->koord[i].y, sizeof(double), 1, koordFile);
+			}
+			fclose(koordFile);
+			*map = tmp;
+
+			printf("%lf, %lf", tmp->koord[27].x, tmp->koord[90].y);
 		}
-		fclose(koordFile);
 	}
 }
 
@@ -68,34 +73,36 @@ KOORD pixelToCoord(PIXELKOORD pixel)
 {
 	double gap_x, gap_y, width_c, height_c;
 
-	KOORD Upper_Left;//A
-	KOORD Lower_Left;//B
-	KOORD Upper_Right;//c
+	KOORD Upper_Left; //A
+	KOORD Lower_Left; //B
+	KOORD Upper_Right; //c
 	KOORD result;
 
 	//A
-	Upper_Left.x=-1.9811692;
-	Upper_Left.y=43.3270931;
+	Upper_Left.x = -1.9811692;
+	Upper_Left.y = 43.3270931;
 	//B
-	Lower_Left.x=-1.9811692;
-	Lower_Left.y=43.3210206;
+	Lower_Left.x = -1.9811692;
+	Lower_Left.y = 43.3210206;
 	//C
-	Upper_Right.x=-1.9653983;
-	Upper_Right.y=43.3270931;
-
+	Upper_Right.x = -1.9653983;
+	Upper_Right.y = 43.3270931;
 
 	//creo los modulos para saber las distancias
-	height_c = sqrt(pow(Upper_Left.x-Lower_Left.x,2)+pow(Upper_Left.y-Lower_Left.y,2));
-	width_c = sqrt(pow(Upper_Left.x-Upper_Right.x,2)+pow(Upper_Left.y-Upper_Right.y,2));
-
+	height_c = sqrt(
+			pow(Upper_Left.x - Lower_Left.x, 2)
+					+ pow(Upper_Left.y - Lower_Left.y, 2));
+	width_c = sqrt(
+			pow(Upper_Left.x - Upper_Right.x, 2)
+					+ pow(Upper_Left.y - Upper_Right.y, 2));
 
 	//Pixel bakoitzeko koordenatu tartea
-	gap_x = width_c/(double)IMG_WIDTH;
-	gap_y = height_c/(double)IMG_HEIGHT;
+	gap_x = width_c / (double) IMG_WIDTH;
+	gap_y = height_c / (double) IMG_HEIGHT;
 
 	//saco la cordenada X e Y de pixeles a las de gps "EPSG:3857"
-	result.x = Upper_Left.x+(gap_x*pixel.x);
-	result.y = Upper_Left.y-(gap_y*pixel.y);
+	result.x = Upper_Left.x + (gap_x * pixel.x);
+	result.y = Upper_Left.y - (gap_y * pixel.y);
 
 	return result;
 }
@@ -107,8 +114,10 @@ double distance(double lon1, double lat1, double lon2, double lat2)
 	dLat = lat2 * PI / 180 - lat1 * PI / 180;
 	dLon = lon2 * PI / 180 - lon1 * PI / 180;
 
-	a = sin(dLat/2) * sin(dLat/2) + cos(lat1 * PI / 180) * cos(lat2 * PI / 180) * sin(dLon/2) * sin(dLon/2);
-	c = 2 * atan2(sqrt(a), sqrt(1-a));
+	a = sin(dLat / 2) * sin(dLat / 2)
+			+ cos(lat1 * PI / 180) * cos(lat2 * PI / 180) * sin(dLon / 2)
+					* sin(dLon / 2);
+	c = 2 * atan2(sqrt(a), sqrt(1 - a));
 	d = EARTH_R * c;
 
 	return d * 1000;
@@ -118,31 +127,35 @@ PIXELKOORD coordToPixel(KOORD point)
 {
 	double gap_x, gap_y, width_c, height_c;
 
-	KOORD Upper_Left;//A
-	KOORD Lower_Left;//B
-	KOORD Upper_Right;//c
+	KOORD Upper_Left; //A
+	KOORD Lower_Left; //B
+	KOORD Upper_Right; //c
 	PIXELKOORD result;
 
 	//A
-	Upper_Left.x=-1.9811692;
-	Upper_Left.y=43.3270931;
+	Upper_Left.x = -1.9811692;
+	Upper_Left.y = 43.3270931;
 	//B
-	Lower_Left.x=-1.9811692;
-	Lower_Left.y=43.3210206;
+	Lower_Left.x = -1.9811692;
+	Lower_Left.y = 43.3210206;
 	//C
-	Upper_Right.x=-1.9653983;
-	Upper_Right.y=43.3270931;
+	Upper_Right.x = -1.9653983;
+	Upper_Right.y = 43.3270931;
 
 	//creo los modulos para saber las distancias
-	width_c = sqrt(pow(Upper_Left.x-Upper_Right.x,2)+pow(Upper_Left.y-Upper_Right.y,2));
-	height_c = sqrt(pow(Upper_Left.x-Lower_Left.x,2)+pow(Upper_Left.y-Lower_Left.y,2));
+	width_c = sqrt(
+			pow(Upper_Left.x - Upper_Right.x, 2)
+					+ pow(Upper_Left.y - Upper_Right.y, 2));
+	height_c = sqrt(
+			pow(Upper_Left.x - Lower_Left.x, 2)
+					+ pow(Upper_Left.y - Lower_Left.y, 2));
 
 	//calculo cuntos tengo que sumar a la cordenada A para llegar a la cordenada C
-	gap_x = width_c/IMG_WIDTH;
-	gap_y = height_c/IMG_HEIGHT;
+	gap_x = width_c / IMG_WIDTH;
+	gap_y = height_c / IMG_HEIGHT;
 
 	result.x = (point.x - Upper_Left.x) / gap_x;
-	result.y = ((point.y - Upper_Left.y)/-gap_y);	//+1 eginez pixela hobeta
+	result.y = ((point.y - Upper_Left.y) / -gap_y);	//+1 eginez pixela hobeta
 
 	return result;
 }
@@ -184,7 +197,10 @@ PATH dijkstra(MAP map, int start, int end)
 				//mira la siguiente ruta mas pequeña
 				for (int j = 0; j < map.size; j++)
 				{
-					if (!visited[j] && (map.mapMatrix[pos][j] + paths[pos].cost) < (map.mapMatrix[min_pos][min] + paths[min_pos].cost))
+					if (!visited[j]
+							&& (map.mapMatrix[pos][j] + paths[pos].cost)
+									< (map.mapMatrix[min_pos][min]
+											+ paths[min_pos].cost))
 					{
 						min = j;
 						min_pos = pos;
@@ -198,12 +214,13 @@ PATH dijkstra(MAP map, int start, int end)
 			if (map.mapMatrix[min][i] + paths[min].cost < paths[i].cost)
 			{
 				paths[i].cost = map.mapMatrix[min][i] + paths[min].cost;
-				copyPath(paths[i].vertex, &paths[i].len, paths[min].vertex, paths[min].len);
+				copyPath(paths[i].vertex, &paths[i].len, paths[min].vertex,
+						paths[min].len);
 				paths[i].vertex[paths[i].len] = min;
 				paths[i].len++;
 			}
 		}
-		visited[min] = 1;//marcas el nodo como visitado
+		visited[min] = 1;				//marcas el nodo como visitado
 	}
 	paths[end].vertex[paths[end].len] = end;
 	paths[end].len++;
@@ -223,7 +240,8 @@ void fillPathKoord(KOORD map[], PATH *fastestPath)
 {
 	for (int i = 0; i < fastestPath->len; i++)
 	{
-		fastestPath->vertex_koord[i] = coordToPixel(map[fastestPath->vertex[i]]);
+		fastestPath->vertex_koord[i] = coordToPixel(
+				map[fastestPath->vertex[i]]);
 	}
 }
 
@@ -248,7 +266,8 @@ PATH A_star(MAP map, int start, int end)
 			paths[i].vertex[paths[i].len] = start;
 			paths[i].len++;
 		}
-		heuristics[i] = distance(map.koord[i].x, map.koord[i].y, map.koord[end].x, map.koord[end].y);
+		heuristics[i] = distance(map.koord[i].x, map.koord[i].y,
+				map.koord[end].x, map.koord[end].y);
 	}
 
 	paths[start].cost = 0;
@@ -267,7 +286,12 @@ PATH A_star(MAP map, int start, int end)
 				//mira la siguiente ruta mas pequeña
 				for (int j = 0; j < map.size; j++)
 				{
-					if (!visited[j] && (map.mapMatrix[pos][j] + paths[pos].cost + heuristics[j]) < (map.mapMatrix[min_pos][min] + paths[min_pos].cost) + heuristics[min])
+					if (!visited[j]
+							&& (map.mapMatrix[pos][j] + paths[pos].cost
+									+ heuristics[j])
+									< (map.mapMatrix[min_pos][min]
+											+ paths[min_pos].cost)
+											+ heuristics[min])
 					{
 						min = j;
 						min_pos = pos;
@@ -281,12 +305,13 @@ PATH A_star(MAP map, int start, int end)
 			if (map.mapMatrix[min][i] + paths[min].cost < paths[i].cost)
 			{
 				paths[i].cost = map.mapMatrix[min][i] + paths[min].cost;
-				copyPath(paths[i].vertex, &paths[i].len, paths[min].vertex, paths[min].len);
+				copyPath(paths[i].vertex, &paths[i].len, paths[min].vertex,
+						paths[min].len);
 				paths[i].vertex[paths[i].len] = min;
 				paths[i].len++;
 			}
 		}
-		visited[min] = 1;//marcas el nodo como visitado
+		visited[min] = 1;				//marcas el nodo como visitado
 	}
 	paths[end].vertex[paths[end].len] = end;
 	paths[end].len++;

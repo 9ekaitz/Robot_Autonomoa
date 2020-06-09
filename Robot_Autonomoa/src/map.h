@@ -16,7 +16,7 @@
 	}PIXELKOORD;
 
 	typedef struct map{
-		KOORD koord[MAX_MAP_LEN];
+		KOORD *koord;
 		double mapMatrix[MAX_MAP_LEN][MAX_MAP_LEN];
 		int size;
 	}MAP;
