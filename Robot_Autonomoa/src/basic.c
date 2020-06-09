@@ -1,7 +1,9 @@
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_ttf.h"
+#include "status.h"
 #include "map.h"
 #include "graphic.h"
-#include "status.h"
+#include "event.h"
 #include "basic.h"
 
 int windowandRender(SDL_Window **window, SDL_Renderer **render, TTF_Font **font)
@@ -125,7 +127,7 @@ void renderObjects(SDL_Renderer **render, BACKGROUND *background,
 
 		if (aux->obj->type == CAR && *current == ONROUTE)
 		{
-			followTheLine(fastestPath, aux->obj, current, background);
+			followTheLine(aux->obj, fastestPath, current, background);
 		}
 		//Render
 		SDL_RenderCopy(*render, aux->obj->texture, NULL, &aux2);
