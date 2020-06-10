@@ -11,7 +11,7 @@ void load_map(MAP **map, char mapDat[], char koordDat[])
 	KOORD *coords;
 	FILE *mapFile, *koordFile;
 
-	mapFile = fopen(mapDat, "r");
+	mapFile = fopen(mapDat, "r"); //konexioen matrizea
 	coords = (KOORD*) malloc(sizeof(KOORD) * tmp->size);
 
 	if (mapFile > 0)
@@ -33,7 +33,7 @@ void load_map(MAP **map, char mapDat[], char koordDat[])
 		}
 		fclose(mapFile);
 		*map = tmp;
-		koordFile = fopen(koordDat, "rb");
+		koordFile = fopen(koordDat, "rb"); //koordenatuena ireki eta jaso matrizean
 		if (koordFile > 0)
 		{
 			for (int i = 0; i < tmp->size; i++)
@@ -55,7 +55,7 @@ int nearestPoint(KOORD koord[], int dim, PIXELKOORD mouse)
 	double min = INT_MAX, dist;
 	KOORD tmp;
 	tmp = pixelToCoord(mouse);
-	for (int i = 0; i < dim; i++)
+	for (int i = 0; i < dim; i++) //Puntu guztietara dagoen puntuetako distantziak begiratzen dira
 	{
 
 		dist = distance(koord[i].x, koord[i].y, tmp.x, tmp.y);
@@ -240,8 +240,7 @@ void fillPathKoord(KOORD map[], PATH *fastestPath)
 {
 	for (int i = 0; i < fastestPath->len; i++)
 	{
-		fastestPath->vertex_koord[i] = coordToPixel(
-				map[fastestPath->vertex[i]]);
+		fastestPath->vertex_koord[i] = coordToPixel( map[fastestPath->vertex[i]]); //id artu eta pixeletatik koordenatuetara pasa bere koordenatuak emanaz
 	}
 }
 

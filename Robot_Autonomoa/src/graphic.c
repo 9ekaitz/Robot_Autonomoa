@@ -10,7 +10,7 @@ void load_background(pBACKGROUND *background, SDL_Renderer *render, char src[], 
 	SDL_Surface* surface;
 	SDL_Texture* texture;
 
-	BACKGROUND *tmp = (BACKGROUND *)malloc(sizeof(BACKGROUND));
+	BACKGROUND *tmp = (BACKGROUND *)malloc(sizeof(BACKGROUND)); //Memorian jaso
 
 	surface = SDL_LoadBMP(src);
 	if (!surface)
@@ -180,7 +180,7 @@ void load_fontData(OBJECT **object, SDL_Renderer *render, TTF_Font *font, SDL_Co
 	tmp->type = FONT;
 	tmp->texture = texture;
 
-	SDL_QueryTexture(texture, NULL, NULL, &tmp->dim.w, &tmp->dim.h); //sdl_rect estrukturari balioak emateko
+	SDL_QueryTexture(texture, NULL, NULL, &tmp->dim.w, &tmp->dim.h); //sdl_rect estrukturari balioak emateko, textura eta arraia eman eta fuentearen tamainagatik berak erabaki luzera eta zabalera
 	tmp->dim.x = x;
 	tmp->dim.y = y;
 
@@ -193,8 +193,8 @@ void load_font(pNODO_OBJ *header, SDL_Renderer *render, float cost, TTF_Font *fo
 	OBJECT *object;
 	char text[128];
 
-	sprintf(text, "%.2f", cost);
-	strcat(text, " m");
+	sprintf(text, "%.2f", cost); //kostea printeatu
+	strcat(text, " m"); //metro jarri amaieran
 
 	load_fontData(&object, render, font, color, text, 1140, 20);
 	load_objectInsertBottom(header, object);

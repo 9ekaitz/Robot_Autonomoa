@@ -164,46 +164,47 @@ void refreshStatus(BACKGROUND *background, PROCCESS *current,
 	case SELECT_1:
 		if (route->kop == 1)
 		{
-			startPoint = coordToPixel(map->koord[route->points[0]]);
-			while (aux != NULL && aux->obj->type != START)
+			startPoint = coordToPixel(map->koord[route->points[0]]); //pixelak lortu koordenatuetatik
+			while (aux != NULL && aux->obj->type != START) //banderitara joateko
 			{
-				aux = aux->ptrNext;
+				aux = aux->ptrNext; //bilatzean to renderren sartu
 			}
-			load_objectInsertBottom(toRender, aux->obj);
-			aux->obj->dim.x = startPoint.x;
+			load_objectInsertBottom(toRender, aux->obj); //objektuen listan jaso
+			aux->obj->dim.x = startPoint.x; //klikatu dugun baloreak jaso
 			aux->obj->dim.y = startPoint.y;
 			//load;
-			*current = SELECT_2;
+			*current = SELECT_2; //estadoa aldatu
 		}
 		break;
 	case SELECT_2:
-		if (route->kop == 2)
+		if (route->kop == 2) //bigarren puntua aukeratu
 		{
-			startPoint = coordToPixel(map->koord[route->points[0]]);
-			endPoint = coordToPixel(map->koord[route->points[1]]);
-			while (aux != NULL && aux->obj->type != END)
+			startPoint = coordToPixel(map->koord[route->points[0]]); //lenengo puntua atera a* erabiltzeko
+			endPoint = coordToPixel(map->koord[route->points[1]]); //azkenenko puntua atera
+			while (aux != NULL && aux->obj->type != END) //rebobina asta la bandera de meta
 			{
 				aux = aux->ptrNext;
 			}
-			load_objectInsertBottom(toRender, aux->obj);
-			aux->obj->dim.x = endPoint.x;
+			load_objectInsertBottom(toRender, aux->obj); //guarda en la lista torender para renderizar
+			aux->obj->dim.x = endPoint.x; //x y para saber donde pone bandera
 			aux->obj->dim.y = endPoint.y;
-			aux = header;
-			while (aux != NULL && aux->obj->type != CAR)
+			aux = header; //reseteamos aux = header
+			while (aux != NULL && aux->obj->type != CAR) //bilatu kotxea
 			{
 				aux = aux->ptrNext;
 			}
-			load_objectInsertBottom(toRender, aux->obj);
-			aux->obj->dim.x = startPoint.x;
+			load_objectInsertBottom(toRender, aux->obj); //renderizatu listan gorde
+			aux->obj->dim.x = startPoint.x; //x eta y puntuak jaso
 			aux->obj->dim.y = startPoint.y;
 
 			//load
 			route->kop = 0;
-			*fastestPath = A_star(*map, route->points[0], route->points[1]);
+			*fastestPath = A_star(*map, route->points[0], route->points[1]); //a* aplikatu eta biderik motzena ematen dizut nodo eta kosteekin
 			fillPathKoord(map->koord, fastestPath);
-			load_font(toRender, render, fastestPath->cost, font, color);
-			*current = ONROUTE;
+			load_font(toRender, render, fastestPath->cost, font, color); //karga fuente
+			*current = ONROUTE; //Rutan gaudela adierazi
 
+			//SCROLL
 			if (startPoint.x - PANTAILA_ZABALERA / 2 < 0)
 			{
 				scrollAux.x = 0;
@@ -237,7 +238,7 @@ void refreshStatus(BACKGROUND *background, PROCCESS *current,
 		break;
 	case FINISHED:
 		restart(background, toRender);
-		system("firefox https://www.openstreetmap.org/#map=17/43.32404/-1.97324");
+		//system("firefox https://www.openstreetmap.org/#map=17/43.32404/-1.97324");
 		*current = SELECT_1;
 		break;
 	default:

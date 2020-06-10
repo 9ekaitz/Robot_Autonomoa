@@ -66,7 +66,7 @@ void renderBackground(SDL_Renderer **render, BACKGROUND *background)
 	SDL_SetRenderDrawColor(*render, 0, 0, 0, 255);	//Kolorea ezarri
 	SDL_RenderClear(*render);	//Pantaila esandako kolorearekin garbitu
 
-	if (background->dim.x != -1)
+	if (background->dim.x != -1) //Scrolla dagoenean != -1, beraz eskalatu
 		dst = &background->dim;
 	else
 		dst = NULL;

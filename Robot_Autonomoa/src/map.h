@@ -16,9 +16,9 @@
 	}PIXELKOORD;
 
 	typedef struct map{
-		KOORD *koord;
-		double mapMatrix[MAX_MAP_LEN][MAX_MAP_LEN];
-		int size;
+		KOORD *koord; //Koordenatuak
+		double mapMatrix[MAX_MAP_LEN][MAX_MAP_LEN]; //Auzokidetasun matrizea
+		int size; //Nodo kopurua
 	}MAP;
 
 	typedef struct route{
@@ -30,7 +30,7 @@
 		float cost;
 		int vertex[MAX_MAP_LEN];
 		int len;
-		PIXELKOORD vertex_koord[MAX_MAP_LEN];
+		PIXELKOORD vertex_koord[MAX_MAP_LEN]; //Nodo guztien pixel koordenatuak
 	}PATH;
 
 
