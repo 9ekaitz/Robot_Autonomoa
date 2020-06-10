@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include "matrizeasortu.h"
 
+#define NODOS 196
+
 void matrizeaSinplifikatu()
 {
 	FILE *fitxategia = fopen("distancia.csv", "r");
-	FILE *fitxategiaINPUT = fopen("input_U.txt", "r");
+	FILE *fitxategiaINPUT = fopen("input", "r");
 	FILE *fitxategiadest = fopen("distanciaRECT_U", "w");
 
 	int i, zaborra, x, tmp;
@@ -16,7 +18,7 @@ void matrizeaSinplifikatu()
 		//fscanf(fitxategiaINPUT, "%d", &x);
 		//sscanf(str[z], "\"%d\",\"%d", &zaborra, &tmp);
 		//	fprintf(fitxategiadest, "%s\n", str[z]);
-	for (int z = 0; z < 196; z++)
+	for (int z = 0; z < NODOS; z++)
 	{
 		i = 0;
 		fscanf(fitxategia, "%s", str[0]);
@@ -57,15 +59,15 @@ void matrizeaSortu_v2_Binario()
 	fpos_t position;
 
 	int id, to, j = 0, exit, kop = 196;
-	double data[196], tmp;
+	double data[NODOS], tmp;
 	char str[6][256];
 
 	fwrite(&kop, sizeof(int), 1, fitxategiadest);
 
 	fgetpos(fitxategia, &position);
-	for (int x = 0; x < 196; x++)
+	for (int x = 0; x < NODOS; x++)
 	{
-		for (int i = 0; i < 196; i++)
+		for (int i = 0; i < NODOS; i++)
 		{
 			data[i] = -1;
 		}
@@ -87,7 +89,7 @@ void matrizeaSortu_v2_Binario()
 			}
 			j++;
 		} while (!exit);
-		for (int i = 0; i < 196; i++)
+		for (int i = 0; i < NODOS; i++)
 		{
 			fwrite(&data[i], sizeof(double), 1, fitxategiadest);
 		}
@@ -105,7 +107,7 @@ void koordAtera()
 	double z, y;
 	char str[256];
 
-	for (int x = 0; x < 196; x++)
+	for (int x = 0; x < NODOS; x++)
 	{
 		fscanf(fitxategia, "%s", str);
 		sscanf(str, "\"%lf\",\"%lf\",%i", &z, &y, &id);
