@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include "matrizeasortu.h"
 
-#define NODOS 196
+#define NODOS 7
 
 void matrizeaSinplifikatu()
 {
 	FILE *fitxategia = fopen("distancia.csv", "r");
 	FILE *fitxategiaINPUT = fopen("input", "r");
-	FILE *fitxategiadest = fopen("distanciaRECT_U", "w");
+	FILE *fitxategiadest = fopen("distanciaRECT", "w");
 
 	int i, zaborra, x, tmp;
 	char str[256][256];
@@ -54,11 +54,11 @@ void matrizeaSinplifikatu()
 void matrizeaSortu_v2_Binario()
 {
 	FILE *fitxategia = fopen("distanciaRECT", "r");
-	FILE *fitxategiadest = fopen("gros.dat", "w");
+	FILE *fitxategiadest = fopen("mapa.dat", "w");
 
 	fpos_t position;
 
-	int id, to, j = 0, exit, kop = 196;
+	int id, to, j = 0, exit, kop = NODOS;
 	double data[NODOS], tmp;
 	char str[6][256];
 
@@ -101,7 +101,7 @@ void matrizeaSortu_v2_Binario()
 void koordAtera()
 {
 	FILE *fitxategia = fopen("coord.csv", "r");
-	FILE *fitxategiadest = fopen("gros_koord.dat", "w");
+	FILE *fitxategiadest = fopen("map_koord.dat", "w");
 
 	int id;
 	double z, y;

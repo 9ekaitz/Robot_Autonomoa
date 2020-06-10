@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "matrizeasortu.h"
-#include "matrizeakonprobatu.h"
 
 int main()
 {
